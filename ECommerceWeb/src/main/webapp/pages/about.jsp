@@ -9,7 +9,7 @@
     <title>About Us - Jordan Shadow Sneaks Hub</title>
     <meta name="description" content="Learn about Shadow Sneaks Jordan Collection" />
     <link rel="stylesheet" href="../css/styles.css" />
-    <script src="script.js" defer></script>
+    <script src="../JavaScript/script.js" defer></script>
 </head>
 
 <body>

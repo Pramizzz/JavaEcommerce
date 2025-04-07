@@ -9,7 +9,7 @@
     <title>Jordan Shadow Sneaks Hub</title>
     <meta name="description" content="Premium Jordan sneakers collection" />
     <link rel="stylesheet" href="../css/styles.css" />
-    <script src="./script.js" defer></script>
+    <script src="../JavaScript/script.js" defer></script>
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
 </head>
