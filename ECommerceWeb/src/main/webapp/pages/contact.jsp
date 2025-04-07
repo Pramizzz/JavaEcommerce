@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Contact Us - Jordan Shadow Sneaks Hub</title>
     <meta name="description" content="Contact Shadow Sneaks for any inquiries" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
     <script src="script.js" defer></script>
 </head>
 
