@@ -52,7 +52,7 @@
                 <div class="products-grid">
                     <div class="product-card" data-id="1">
                         <div class="product-image">
-                            <img src="https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/fd43a343-1651-4965-99df-68ca5c3a29f1/air-jordan-1-mid-shoes-SQf7DM.png"
+                            <img src="../resources/images/AirJordan4BlackCanvas.png"
                                 alt="Air Jordan 1 Mid" />
                         </div>
                         <div class="product-info">
@@ -64,8 +64,8 @@
 
                     <div class="product-card" data-id="2">
                         <div class="product-image">
-                            <img src="https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/33533fe2-1157-4001-896e-1803c60f0ea8/air-jordan-4-retro-shoes-DbgkPK.png"
-                                alt="Air Jordan 4 Retro" />
+                            <img src="../resources/images/AirJordan1.png"
+                                alt="Air Jordan 1" />
                         </div>
                         <div class="product-info">
                             <h3>Air Jordan 4 Retro</h3>
