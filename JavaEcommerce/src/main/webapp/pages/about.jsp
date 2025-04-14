@@ -6,8 +6,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>About Us - Jordan Shadow Sneaks Hub</title>
-    <meta name="description" content="Learn about Shadow Sneaks Jordan Collection" />
+    <title>About Us - Jordan KicksSole Hub</title>
+    <meta name="description" content="Learn about KicksSole Jordan Collection" />
     <link rel="stylesheet" href="../css/styles.css" />
     <script src="../JavaScript/script.js" defer></script>
 </head>
@@ -17,7 +17,7 @@
         <header>
             <div class="logo">
                 <img src="https://www.jumpman23.com/favicon.ico" alt="Jordan Logo" />
-                <h1>Shadow Sneaks</h1>
+                <h1>KicksSole</h1>
             </div>
             <nav>
                 <div class="menu-icon" id="menuToggle">
@@ -49,8 +49,8 @@
                             alt="Jordan Legacy" />
                     </div>
                     <div class="about-text">
-                        <h3>The Shadow Sneaks Journey</h3>
-                        <p>Founded in 2015, Shadow Sneaks started as a small passion project by sneaker enthusiasts
+                        <h3>The KicksSole Journey</h3>
+                        <p>Founded in 2015, KicksSole started as a small passion project by sneaker enthusiasts
                             dedicated to providing authentic Jordan products to collectors and fans worldwide.</p>
                         <p>What began as a modest online store has grown into one of the most trusted destinations for
                             premium Jordan sneakers, apparel, and accessories. Our commitment to quality, authenticity,
@@ -132,7 +132,7 @@
             <div class="footer-content">
                 <div class="footer-logo">
                     <img src="https://www.jumpman23.com/favicon.ico" alt="Jordan Logo" />
-                    <h2>Shadow Sneaks</h2>
+                    <h2>KicksSole</h2>
                 </div>
                 <div class="footer-links">
                     <div class="link-group">
@@ -165,7 +165,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 Shadow Sneaks. All rights reserved.</p>
+                <p>&copy; 2025 KicksSole. All rights reserved.</p>
                 <div class="social-links">
                     <a href="#" class="social-icon">FB</a>
                     <a href="#" class="social-icon">IG</a>

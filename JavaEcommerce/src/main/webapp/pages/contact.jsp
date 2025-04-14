@@ -6,8 +6,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contact Us - Jordan Shadow Sneaks Hub</title>
-    <meta name="description" content="Contact Shadow Sneaks for any inquiries" />
+    <title>Contact Us - Jordan KicksSole Hub</title>
+    <meta name="description" content="Contact KicksSole for any inquiries" />
     <link rel="stylesheet" href="../css/styles.css" />
     <script src="../JavaScript/script.js" defer></script>
 </head>
@@ -17,7 +17,7 @@
         <header>
             <div class="logo">
                 <img src="https://www.jumpman23.com/favicon.ico" alt="Jordan Logo" />
-                <h1>Shadow Sneaks</h1>
+                <h1>KicksSole</h1>
             </div>
             <nav>
                 <div class="menu-icon" id="menuToggle">
@@ -154,7 +154,7 @@
             <div class="footer-content">
                 <div class="footer-logo">
                     <img src="https://www.jumpman23.com/favicon.ico" alt="Jordan Logo" />
-                    <h2>Shadow Sneaks</h2>
+                    <h2>KicksSole</h2>
                 </div>
                 <div class="footer-links">
                     <div class="link-group">
@@ -187,7 +187,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 Shadow Sneaks. All rights reserved.</p>
+                <p>&copy; 2025 KicksSole. All rights reserved.</p>
                 <div class="social-links">
                     <a href="#" class="social-icon">FB</a>
                     <a href="#" class="social-icon">IG</a>

@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Products - Jordan Shadow Sneaks Hub</title>
+    <title>Products - Jordan KicksSole Hub</title>
     <meta name="description" content="Browse our premium Jordan sneakers collection" />
     <link rel="stylesheet" href="../css/styles.css" />
     <script src="../JavaScript/script.js" defer></script>
@@ -17,7 +17,7 @@
         <header>
             <div class="logo">
                 <img src="https://www.jumpman23.com/favicon.ico" alt="Jordan Logo" />
-                <h1>Shadow Sneaks</h1>
+                <h1>KicksSole</h1>
             </div>
             <nav>
                 <div class="menu-icon" id="menuToggle">
@@ -85,7 +85,7 @@
             <div class="footer-content">
                 <div class="footer-logo">
                     <img src="https://www.jumpman23.com/favicon.ico" alt="Jordan Logo" />
-                    <h2>Shadow Sneaks</h2>
+                    <h2>KicksSole</h2>
                 </div>
                 <div class="footer-links">
                     <div class="link-group">
@@ -118,7 +118,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 Shadow Sneaks. All rights reserved.</p>
+                <p>&copy; 2025 KicksSole. All rights reserved.</p>
                 <div class="social-links">
                     <a href="#" class="social-icon">FB</a>
                     <a href="#" class="social-icon">IG</a>
