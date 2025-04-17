@@ -147,6 +147,26 @@
         </div>
         <div class="overlay" id="overlay"></div>
     </div>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch("ProductListServlet")
+            .then(res => res.json())
+            .then(products => {
+                const container = document.getElementById("productsContainer");
+                container.innerHTML = "";
+                products.forEach(p => {
+                    container.innerHTML += `
+                        <div class="product-card">
+                            <img src="${p.imageUrl}" alt="${p.name}">
+                            <h3>${p.name}</h3>
+                            <p>${p.details}</p>
+                            <span>$${p.price.toFixed(2)}</span>
+                        </div>
+                    `;
+                });
+            });
+    });
+</script>
 </body>
 
 </html>

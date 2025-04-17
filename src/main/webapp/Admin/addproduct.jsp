@@ -189,49 +189,25 @@ input[type="file"] {
         </div>
     </div>
 
-    <!-- Add Product Form Modal -->
-    <div id="productForm" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeProductForm()">&times;</span>
-            <h2>Add New Product</h2>
-            <form>
-                <label>Product ID:</label>
-                <input type="text" placeholder="Enter product ID">
-                
-                <label>Category:</label>
-                <select>
-                    <option value="electronics">Electronics</option>
-                    <option value="fashion">Fashion</option>
-                    <option value="home">Home & Kitchen</option>
-                </select>
-                
-                <label>Sub-Category:</label>
-                <select>
-                    <option value="mobile">Mobile</option>
-                    <option value="laptop">Laptop</option>
-                    <option value="accessories">Accessories</option>
-                </select>
-                
-                <label>Product Name:</label>
-                <input type="text" placeholder="Enter product name">
-                
-                <label>Details:</label>
-                <textarea placeholder="Enter product details"></textarea>
-                
-                <label>Price:</label>
-                <input type="text" placeholder="Enter product price">
-                
-                <label>Stock:</label>
-                <input type="number" placeholder="Enter stock quantity">
-                
-                <label>Upload Image:</label>
-                <input type="file" accept="image/*">
-                
-                <button type="submit" class="btn btn-success">Save Product</button>
-            </form>
-        </div>
-    </div>
+     <form action="AddProductServlet" method="POST">
+        <input name="name" type="text" placeholder="Product Name" required /><br />
+        <input name="category" type="text" placeholder="Category" required /><br />
+        <input name="subCategory" type="text" placeholder="Sub-Category" /><br />
+        <textarea name="details" placeholder="Product Details"></textarea><br />
+        <input name="price" type="number" step="0.01" placeholder="Price" required /><br />
+        <input name="stock" type="number" placeholder="Stock" required /><br />
+        <input name="imageUrl" type="text" placeholder="Image URL" /><br />
+        <button type="submit">Add Product</button>
+    </form>
 
+    <%
+        if (request.getParameter("success") != null) {
+            out.println("<p style='color:green;'>Product added successfully!</p>");
+        }
+        if (request.getParameter("error") != null) {
+            out.println("<p style='color:red;'>Error adding product!</p>");
+        }
+    %>
   
         <script>
     
