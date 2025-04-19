@@ -54,7 +54,7 @@ public class LoginServlet extends HttpServlet {
                 response.addCookie(sessionCookie);
 
                 if (role.equals("admin")) {
-                    response.sendRedirect("register/adminDashboard.jsp");
+                    response.sendRedirect("register/admin/adminDashboard.jsp");
                 } else {
                     response.sendRedirect("register/home.jsp");
                 }

@@ -5,14 +5,14 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.*;
 
-@WebFilter("/register/adminDashboard.jsp")
+@WebFilter("/register/admin/adminDashboard.jsp")
 public class AuthenticationFilter implements Filter {
 
     /**
      * Default constructor.
      */
     public AuthenticationFilter() {
-        // Default constructor
+        // Default constructors
     }
 
     /**
