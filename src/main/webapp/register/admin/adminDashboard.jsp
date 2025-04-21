@@ -4,54 +4,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>E-Commerce Admin Dashboard</title>
-<style>
-    body {
-        margin: 0;
-        font-family: 'Segoe UI', sans-serif;
-        background-color: #f0f2f5;
-    }
-    .sidebar {
-        height: 100vh;
-        width: 220px;
-        background-color: #2c3e50;
-        position: fixed;
-        left: 0;
-        top: 0;
-        color: white;
-        padding-top: 20px;
-    }
-    .sidebar h2 {
-        text-align: center;
-        margin-bottom: 30px;
-    }
-    .sidebar a {
-        display: block;
-        padding: 15px 20px;
-        color: white;
-        text-decoration: none;
-    }
-    .sidebar a:hover {
-        background-color: #34495e;
-    }
-    .header {
-        margin-left: 220px;
-        padding: 20px;
-        background-color: #2980b9;
-        color: white;
-    }
-    .content {
-        margin-left: 220px;
-        padding: 20px;
-    }
-    .card {
-        background-color: white;
-        padding: 20px;
-        margin-bottom: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-</style>
+<link rel="stylesheet" href="../admincss/admindashboard.css">
+<title>Kicksole Admin Dashboard</title>
+<
 </head>
 <body>
 
