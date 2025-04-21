@@ -9,13 +9,13 @@
 
     <link rel="stylesheet"
           href="<%= request.getContextPath() %>/register/fonts/material-icon/css/material-design-iconic-font.min.css">
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/register/css/style.css">
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/register/css/login.css">
 </head>
 <body>
 <div class="main">
     <!-- Sign In Form -->
     <section class="sign-in">
-        <div class="container">
+        <div class="container">+
             <div class="signin-content">
                 <div class="signin-image">
                     <figure><img src="<%= request.getContextPath() %>/register/images/signin-image.jpg" alt="sign in image"></figure>

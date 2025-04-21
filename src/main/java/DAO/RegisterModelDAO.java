@@ -10,61 +10,55 @@ import database.DatabaseConnection;
 import model.RegisterModel;
 
 public class RegisterModelDAO {
-    private Connection con;
+	private Connection con;
 
-    public RegisterModelDAO() throws ClassNotFoundException, SQLException {
-        this.con = DatabaseConnection.getConnection();
-    }
+	public RegisterModelDAO() throws ClassNotFoundException, SQLException {
+		this.con = DatabaseConnection.getConnection();
+	}
 
-    public boolean addRegisterModel(RegisterModel user) throws SQLException {
-        if (con == null) {
-            System.out.println("Database Not Connected...");
-            return false;
-        }
+	public boolean addRegisterModel(RegisterModel user) throws SQLException {
+		if (con == null) {
+			System.out.println("Database Not Connected...");
+			return false;
+		}
 
-        boolean rowInserted = false;
+		boolean rowInserted = false;
 
-        String query = "INSERT INTO users(name, username, email, birthday, password, phone, role) VALUES (?, ?, ?, ?, ?, ?, 'customer')";
-        PreparedStatement ps = con.prepareStatement(query);
-        ps.setString(1, user.getName());
-        ps.setString(2, user.getUsername());
-        ps.setString(3, user.getEmail());
-        ps.setString(4, user.getBirthday());
-        ps.setString(5, user.getPassword()); 
-        ps.setString(6, user.getPhone());
+		String query = "INSERT INTO users(name, username, email, birthday, password, phone, role) VALUES (?, ?, ?, ?, ?, ?, 'customer')";
+		PreparedStatement ps = con.prepareStatement(query);
+		ps.setString(1, user.getName());
+		ps.setString(2, user.getUsername());
+		ps.setString(3, user.getEmail());
+		ps.setString(4, user.getBirthday());
+		ps.setString(5, user.getPassword());
+		ps.setString(6, user.getPhone());
 
-        int rows = ps.executeUpdate();
-        if (rows > 0) {
-            rowInserted = true;
-        }
+		int rows = ps.executeUpdate();
+		if (rows > 0) {
+			rowInserted = true;
+		}
 
-        return rowInserted;
-    }
+		return rowInserted;
+	}
 
-    public ArrayList<RegisterModel> getAllRegisterModels() throws SQLException {
-        ArrayList<RegisterModel> registerList = new ArrayList<>();
+	public ArrayList<RegisterModel> getAllRegisterModels() throws SQLException {
+		ArrayList<RegisterModel> registerList = new ArrayList<>();
 
-        if (con == null) {
-            System.out.println("Database Not Connected...");
-            return null;
-        }
+		if (con == null) {
+			System.out.println("Database Not Connected...");
+			return null;
+		}
 
-        String query = "SELECT * FROM users";
-        PreparedStatement ps = con.prepareStatement(query);
-        ResultSet rs = ps.executeQuery();
+		String query = "SELECT * FROM users";
+		PreparedStatement ps = con.prepareStatement(query);
+		ResultSet rs = ps.executeQuery();
 
-        while (rs.next()) {
-            RegisterModel user = new RegisterModel(
-                rs.getString("name"),
-                rs.getString("username"),
-                rs.getString("email"),
-                rs.getString("birthday"),
-                rs.getString("password"),
-                rs.getString("phone")
-            );
-            registerList.add(user);
-        }
+		while (rs.next()) {
+			RegisterModel user = new RegisterModel(rs.getString("name"), rs.getString("username"),
+					rs.getString("email"), rs.getString("birthday"), rs.getString("password"), rs.getString("phone"));
+			registerList.add(user);
+		}
 
-        return registerList;
-    }
+		return registerList;
+	}
 }

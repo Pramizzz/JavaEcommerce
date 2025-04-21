@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Sign Up Form</title>
     <link rel="stylesheet" href="<%= request.getContextPath() %>/register/fonts/material-icon/css/material-design-iconic-font.min.css">
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/register/css/style.css">
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/register/css/login.css">
     
     <style>
         .error {
