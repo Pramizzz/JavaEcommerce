@@ -6,14 +6,15 @@ import database.DatabaseConnection;
 import model.DisplayProductmodel;
 public class AddProductDAO {
 
-    public int insertProduct(String name, int brandId, int categoryId) throws Exception {
-        String sql = "INSERT INTO product (product_name, brand_id, category_id) VALUES (?, ?, ?)";
+    public int insertProduct(String name, int brandId, int categoryId, double price) throws Exception {
+        String sql = "INSERT INTO product (product_name, brand_id, category_id, price) VALUES (?, ?, ?,?)";
         try (Connection conn = DatabaseConnection.getConnection(); 
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, name);
             ps.setInt(2, brandId);
             ps.setInt(3, categoryId);
+            ps.setDouble(4, price);
             ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();
@@ -47,38 +48,65 @@ public class AddProductDAO {
        //get product
         
     }
-    // Get all products from the database
+   
+    
     public List<DisplayProductmodel> getAllProducts() {
-        List<DisplayProductmodel> productList = new ArrayList<>();
+        List<DisplayProductmodel> products = new ArrayList<>();
 
-        try {
-            Connection connection = DatabaseConnection.getConnection();
-            String sql = "SELECT * FROM product";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
+        String sql = "SELECT p.product_id, p.product_name, p.brand_id, p.category_id, p.price, " +
+                     "v.size, v.color, v.stock_quantity " +
+                     "FROM product p " +
+                     "LEFT JOIN product_variant v ON p.product_id = v.product_id";
 
-            while (resultSet.next()) {
-            	DisplayProductmodel p = new DisplayProductmodel();
-                p.setId(resultSet.getInt("product_id"));
-                p.setName(resultSet.getString("product_name"));
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
-                // Optional: check if 'price' exists
-                try {
-                    p.setPrice(resultSet.getDouble("price"));
-                } catch (SQLException e) {
-                    p.setPrice(0.0);
-                }
+            while (rs.next()) {
+                DisplayProductmodel product = new DisplayProductmodel();
+                int productId = rs.getInt("product_id");
 
-                productList.add(p);
+                product.setProductId(productId);
+                product.setProductName(rs.getString("product_name"));
+                product.setBrandId(rs.getInt("brand_id"));
+                product.setCategoryId(rs.getInt("category_id"));
+                product.setPrice(rs.getDouble("price"));
+                product.setVariantSize(rs.getString("size"));
+                product.setVariantColor(rs.getString("color"));
+                product.setVariantStock(rs.getInt("stock_quantity"));
+
+                // Load images for this product
+                product.setImagePaths(getImagePathsByProductId(productId, conn));
+
+                products.add(product);
             }
 
-            resultSet.close();
-            statement.close();
-            connection.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return productList;
+        return products;
     }
+
+    // Helper method
+    private List<String> getImagePathsByProductId(int productId, Connection conn) {
+        List<String> imagePaths = new ArrayList<>();
+        String sql = "SELECT image_path FROM product_images WHERE product_id = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, productId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    imagePaths.add(rs.getString("image_path"));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return imagePaths;
+    }
+
+
+
 }

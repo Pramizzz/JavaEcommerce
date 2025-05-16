@@ -1,66 +1,77 @@
 package model;
 
-import database.DatabaseConnection;
-import java.sql.*;
-import java.util.*;
+import java.util.List;
 
 public class DisplayProductmodel {
-    private int id;
-    private String name;
+    private int productId;
+    private String productName;
+    private int brandId;
+    private int categoryId;
     private double price;
-    private int quantity;
-    private String image;
-    private String brand;
-    private String category;
+
+    private String variantSize;
+    private String variantColor;
+    private int variantStock;
+
+    private List<String> imagePaths; // New field
 
     // Getters and setters
-    public int getId() { 
-        return id; 
+    public int getProductId() {
+        return productId;
     }
-    public void setId(int id) { 
-        this.id = id; 
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
-
-    public String getName() { 
-        return name; 
+    public String getProductName() {
+        return productName;
     }
-    public void setName(String name) { 
-        this.name = name; 
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
-
-    public double getPrice() { 
-        return price; 
+    public int getBrandId() {
+        return brandId;
     }
-    public void setPrice(double price) { 
-        this.price = price; 
+    public void setBrandId(int brandId) {
+        this.brandId = brandId;
     }
-
-    public int getQuantity() { 
-        return quantity; 
+    public int getCategoryId() {
+        return categoryId;
     }
-    public void setQuantity(int quantity) { 
-        this.quantity = quantity; 
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
-
-    public String getImage() { 
-        return image; 
+    public double getPrice() {
+        return price;
     }
-    public void setImage(String image) { 
-        this.image = image; 
+    public void setPrice(double price) {
+        this.price = price;
     }
 
-    public String getBrand() { 
-        return brand; 
+    public String getVariantSize() {
+        return variantSize;
     }
-    public void setBrand(String brand) { 
-        this.brand = brand; 
-    }
-
-    public String getCategory() { 
-        return category; 
-    }
-    public void setCategory(String category) { 
-        this.category = category; 
+    public void setVariantSize(String variantSize) {
+        this.variantSize = variantSize;
     }
 
+    public String getVariantColor() {
+        return variantColor;
+    }
+    public void setVariantColor(String variantColor) {
+        this.variantColor = variantColor;
+    }
+
+    public int getVariantStock() {
+        return variantStock;
+    }
+    public void setVariantStock(int variantStock) {
+        this.variantStock = variantStock;
+    }
+
+    public List<String> getImagePaths() {
+        return imagePaths;
+    }
+    public void setImagePaths(List<String> imagePaths) {
+        this.imagePaths = imagePaths;
+    }
 }
