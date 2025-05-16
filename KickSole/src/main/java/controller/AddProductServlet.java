@@ -9,6 +9,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 
 @WebServlet("/AddProductServlet")
 @MultipartConfig(
@@ -20,6 +22,8 @@ public class AddProductServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private static final String UPLOAD_DIR = "resources/images";
+    
+    
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -32,21 +36,9 @@ public class AddProductServlet extends HttpServlet {
         String color = request.getParameter("variantColor");
         int stockQty = Integer.parseInt(request.getParameter("variantStock"));
 
-        // Safe price parsing
-        double price = 0.0;
-        String priceParam = request.getParameter("productPrice");
-        if (priceParam != null && !priceParam.trim().isEmpty()) {
-            try {
-                price = Double.parseDouble(priceParam.trim());
-            } catch (NumberFormatException e) {
-                // You can log this or handle it differently if needed
-                e.printStackTrace();
-            }
-        }
-
         try {
             AddProductDAO dao = new AddProductDAO();
-            int productId = dao.insertProduct(productName, brandId, categoryId, price);
+            int productId = dao.insertProduct(productName, brandId, categoryId);
             dao.insertVariant(productId, new ProductVariantModel(size, color, stockQty));
 
             // Get absolute path for saving images

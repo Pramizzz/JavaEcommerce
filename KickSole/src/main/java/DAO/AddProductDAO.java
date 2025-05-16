@@ -6,15 +6,14 @@ import database.DatabaseConnection;
 import model.DisplayProductmodel;
 public class AddProductDAO {
 
-    public int insertProduct(String name, int brandId, int categoryId, double price) throws Exception {
-        String sql = "INSERT INTO product (product_name, brand_id, category_id, price) VALUES (?, ?, ?,?)";
+    public int insertProduct(String name, int brandId, int categoryId) throws Exception {
+        String sql = "INSERT INTO product (product_name, brand_id, category_id) VALUES (?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection(); 
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, name);
             ps.setInt(2, brandId);
             ps.setInt(3, categoryId);
-            ps.setDouble(4, price);
             ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();
@@ -48,38 +47,38 @@ public class AddProductDAO {
        //get product
         
     }
+    // Get all products from the database
     public List<DisplayProductmodel> getAllProducts() {
         List<DisplayProductmodel> productList = new ArrayList<>();
 
-        String sql = "SELECT p.product_id, p.product_name, p.price, p.brand_id, p.category_id, " +
-                     "b.brand_name, c.category_name, " +
-                     "(SELECT image_path FROM product_images WHERE product_id = p.product_id LIMIT 1) AS image_path " +
-                     "FROM product p " +
-                     "LEFT JOIN brand b ON p.brand_id = b.brand_id " +
-                     "LEFT JOIN category c ON p.category_id = c.category_id";
-
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql);
-             ResultSet resultSet = ps.executeQuery()) {
+        try {
+            Connection connection = DatabaseConnection.getConnection();
+            String sql = "SELECT * FROM product";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
-                DisplayProductmodel product = new DisplayProductmodel();
+            	DisplayProductmodel p = new DisplayProductmodel();
+                p.setId(resultSet.getInt("product_id"));
+                p.setName(resultSet.getString("product_name"));
 
-                product.setId(resultSet.getInt("product_id"));
-                product.setName(resultSet.getString("product_name"));
-                product.setPrice(resultSet.getDouble("price"));
-                product.setBrand(resultSet.getString("brand_name"));       // Requires setter
-                product.setCategory(resultSet.getString("category_name")); // Requires setter
-                product.setImage(resultSet.getString("image_path"));       // Requires setter
+                // Optional: check if 'price' exists
+                try {
+                    p.setPrice(resultSet.getDouble("price"));
+                } catch (SQLException e) {
+                    p.setPrice(0.0);
+                }
 
-                productList.add(product);
+                productList.add(p);
             }
 
+            resultSet.close();
+            statement.close();
+            connection.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         return productList;
     }
-
 }

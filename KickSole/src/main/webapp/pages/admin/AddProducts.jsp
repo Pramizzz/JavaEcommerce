@@ -55,9 +55,9 @@
             <form action="${pageContext.request.contextPath}/AddProductServlet" method="post" enctype="multipart/form-data">
                 <label for="productName">Product Name:</label>
                 <input type="text" id="productName" name="productName" class="form-input" required>
-<label for="price">Price:</label>
-<input type="number" id="price" name="productPrice" class="form-input" step="0.01" required>
 
+                <label for="price">Price:</label>
+                <input type="number" id="price" name="productprice" class="form-input" required>
 
                 <label for="brandId">Brand:</label>
                 <select id="brandId" name="brandId" class="form-input" required>
@@ -97,48 +97,41 @@
 
     <h2>Existing Products</h2>
 
-<%
+    <%
     AddProductDAO dao = new AddProductDAO(); 
     List<DisplayProductmodel> products = dao.getAllProducts(); 
-%>
-
-<table border="1" cellpadding="10" cellspacing="0">
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Price (₹)</th>
-        <th>Qty</th>
-        <th>Image</th>
-        <th>Brand</th>
-        <th>Category</th>
-        <th>Actions</th>
-    </tr>
-
-    <%
-    for(DisplayProductmodel p : products) {
     %>
-    <tr>
-        <td><%= p.getId() %></td>
-        <td><%= p.getName() %></td>
-        <td>₹<%= String.format("%.2f", p.getPrice()) %></td>
-        <td><%= p.getQuantity() %></td>
-        <td>
-            <img src="uploads/<%= p.getImage() %>" alt="<%= p.getName() %>" style="width: 80px; height: 80px;" />
-        </td>
-        <td><%= p.getBrand() %></td>
-        <td><%= p.getCategory() %></td>
-        <td>
-            <a href="javascript:void(0);" 
-               class="edit-btn" 
-               onclick="openEditModal(<%= p.getId() %>, '<%= p.getName().replace("'", "\\'") %>', <%= p.getPrice() %>)">Edit</a>
-            |
-            <a href="deleteProduct?id=<%= p.getId() %>" class="delete-btn">Delete</a>
-        </td>
-    </tr>
-    <%
-    }
-    %>
-</table>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Qty</th>
+            <th>Image</th>
+            <th>Brand</th>
+            <th>Category</th>
+            <th>Actions</th>
+        </tr>
+        <%
+        for(DisplayProductmodel p : products) {
+        %>
+        <tr>
+            <td><%= p.getId() %></td>
+            <td><%= p.getName() %></td>
+            <td><%= p.getPrice() %></td>
+            <td><%= p.getQuantity() %></td>
+            <td><img src="uploads/<%= p.getImage() %>" alt="<%= p.getName() %>"/></td>
+            <td><%= p.getBrand() %></td>
+            <td><%= p.getCategory() %></td>
+            <td>
+                <a href="javascript:void(0);" class="edit-btn" onclick="openEditModal(<%= p.getId() %>, '<%= p.getName() %>', <%= p.getPrice() %>)">Edit</a>
+                <a href="deleteProduct?id=<%= p.getId() %>" class="delete-btn">Delete</a>
+            </td>
+        </tr>
+        <%
+        }
+        %>
+    </table>
 </div>
 
 <!-- Modal for Editing -->
