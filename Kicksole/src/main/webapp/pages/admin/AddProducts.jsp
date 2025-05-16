@@ -31,14 +31,14 @@
 
 <div class="sidebar">
     <h2>Admin Panel</h2>
-    <a href="<%= request.getContextPath() %>/admin/adminDashbord.jsp">Dashboard</a>
-    <a href="<%= request.getContextPath() %>/admin/category.jsp">Add Category</a>
-    <a href="<%= request.getContextPath() %>/admin/products.jsp">Products</a>
-    <a href="<%= request.getContextPath() %>/admin/user.jsp">Manage Users</a>
-    <a href="<%= request.getContextPath() %>/admin/order.jsp">Orders</a>
-    <a href="<%= request.getContextPath() %>/admin/report.jsp">Reports</a>
-    <a href="<%= request.getContextPath() %>/admin/setting.jsp">Settings</a>
-    <a href="<%= request.getContextPath() %>/home.jsp">Logout</a>
+    <a href="<%= request.getContextPath() %>/pages/admin/adminDashboard.jsp">Dashboard</a>
+    <a href="<%= request.getContextPath() %>/pages/admin/category.jsp">Add Category</a>
+    <a href="<%= request.getContextPath() %>/pages/admin/products.jsp">Products</a>
+    <a href="<%= request.getContextPath() %>/pages/admin/user.jsp">Manage Users</a>
+    <a href="<%= request.getContextPath() %>/pages/admin/order.jsp">Orders</a>
+    <a href="<%= request.getContextPath() %>/pages/admin/report.jsp">Reports</a>
+    <a href="<%= request.getContextPath() %>/pages/admin/setting.jsp">Settings</a>
+    <a href="<%= request.getContextPath() %>/pages/home.jsp">Logout</a>
 </div>
 
 <div class="header">

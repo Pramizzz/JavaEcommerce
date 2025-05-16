@@ -20,7 +20,7 @@
 				        <a href="<%= request.getContextPath() %>/pages/customer/home.jsp">Home</a>
 				    </li>
 				    <li class="<%= currentPage.endsWith("products.jsp") ? "active" : "" %>">
-				        <a href="<%= request.getContextPath() %>/pages/customer/products.jsp">Products</a>
+				        <a href="<%= request.getContextPath() %>/pages/customer/product.jsp">Products</a>
 				    </li>
 				    <li class="<%= currentPage.endsWith("about.jsp") ? "active" : "" %>">
 				        <a href="<%= request.getContextPath() %>/pages/customer/about.jsp">About Us</a>

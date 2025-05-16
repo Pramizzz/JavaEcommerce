@@ -91,9 +91,9 @@
 
 <div class="sidebar">
     <h2>Admin Panel</h2>
-    <a href="<%= request.getContextPath() %>/pages/admin/adminDashbord.jsp">Dashboard</a>
+    <a href="<%= request.getContextPath() %>/pages/admin/adminDashboard.jsp">Dashboard</a>
     <a href="<%= request.getContextPath() %>/pages/admin/category.jsp">Add Category</a>
-    <a href="<%= request.getContextPath() %>/pages/admin/addproducts.jsp">Products</a>
+    <a href="<%= request.getContextPath() %>/pages/admin/AddProducts.jsp">Products</a>
     <a href="<%= request.getContextPath() %>/pages/admin/user.jsp">Manage Users</a>
     <a href="<%= request.getContextPath() %>/pages/admin/order.jsp">Orders</a>
     <a href="<%= request.getContextPath() %>/pages/admin/report.jsp">Reports</a>
@@ -199,7 +199,7 @@ function hideLogoutModal() {
 }
 
 function confirmLogout() {
-    window.location.href = '../home.jsp';
+    window.location.href = '<%= request.getContextPath() %>/pages/customer/home.jsp';
 }
 </script>
 
