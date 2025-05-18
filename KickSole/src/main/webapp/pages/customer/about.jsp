@@ -28,7 +28,7 @@
             <section class="about-section">
                 <div class="about-container">
                     <div class="about-image">
-                        <img src="./images/Group-Photo.png" alt="Jordan Legacy" />
+                        <img src="${pageContext.request.contextPath}/resources/images/Group-Photo.png" alt="Group Photo">
                     </div>
                     <div class="about-text">
                         <h3>The Shadow Sneaks Journey</h3>
@@ -76,7 +76,7 @@
                 <div class="team-container">
                     <div class="team-member">
                         <div class="member-image">
-                            <img src="./images/Pramit.png" alt="Team Member" />
+                            <img src="${pageContext.request.contextPath}/resources/images/Pramit.png" alt="Team Member" />
                         </div>
                         <h3>Pramit Gurung</h3>
                         <p>Database Design </p>
@@ -84,7 +84,7 @@
                     </div>
                     <div class="team-member">
                         <div class="member-image">
-                            <img src="./images/Reshal.png" alt="Team Member" />
+                            <img src="${pageContext.request.contextPath}/resources/images/Reshal.png" alt="Team Member" />
                         </div>
                         <h3>Reshal Shrestha</h3>
                         <p>Designer</p>
@@ -92,7 +92,7 @@
                     </div>
                     <div class="team-member">
                         <div class="member-image">
-                            <img src="./images/Aditya.png" alt="Team Member" />
+                            <img src="${pageContext.request.contextPath}/resources/images/Aditya.png" alt="Team Member" />
                         </div>
                         <h3>Aditya Karki</h3>
                         <p>Frontend Developer </p>
@@ -100,7 +100,7 @@
                     </div>
                     <div class="team-member">
                         <div class="member-image">
-                            <img src="./images/Abin.png" alt="Team Member" />
+                            <img src="${pageContext.request.contextPath}/resources/images/Abin.png" alt="Team Member" />
                         </div>
                         <h3>Abin Udash</h3>
                         <p>Admin Content</p>
@@ -108,7 +108,7 @@
                     </div>
                     <div class="team-member">
                         <div class="member-image">
-                            <img src="./images/Susmarika.png" alt="Team Member" />
+                            <img src="${pageContext.request.contextPath}/resources/images/Susmarika.png" alt="Team Member" />
                         </div>
                         <h3>Susmarika Koirala</h3>
                         <p>Login Panel</p>

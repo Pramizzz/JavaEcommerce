@@ -9,26 +9,16 @@ import java.io.IOException;
 
 @WebServlet("/DeleteProductServlet")
 public class DeleteProductServlet extends HttpServlet {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	 public DeleteProductServlet() {
-	        super();
-	    }
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        int productId = Integer.parseInt(request.getParameter("productId"));
-
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+        	System.out.println(request.getParameter("productId"));
+            int productId = Integer.parseInt(request.getParameter("productId"));
             DeleteProductDAO dao = new DeleteProductDAO();
             dao.deleteProduct(productId);
-            response.sendRedirect("pages/admin/products.jsp?success=1");
+            response.sendRedirect(request.getContextPath()+"/pages/admin/AddProducts.jsp");
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("pages/admin/products.jsp?error=1");
+            response.sendRedirect(request.getContextPath()+"/pages/admin/AddProducts.jsp?error=deleteFailed");
         }
     }
 }

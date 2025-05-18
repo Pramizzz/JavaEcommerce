@@ -1,208 +1,84 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page isELIgnored="false" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="java.util.List" %>
+<%@ page import="DAO.AddBrandDAO" %>
+<%@ page import="DAO.CategoryModelDAO" %>
+<%@ page import="model.AddBrandModel" %>
+<%@ page import="model.AddCategory" %>
+
 
 <!DOCTYPE html>
 <html>
 <head>
+ <link rel="stylesheet" href="<%= request.getContextPath() %>/css/admincss/adminproduct.css">
 <meta charset="UTF-8">
 <title>Products Management</title>
 <style>
-    body {
-        margin: 0;
-        font-family: 'Segoe UI', sans-serif;
-        background-color: #f0f2f5;
-    }
+/* [existing styles remain unchanged] */
+/* Add Product Button */
+#toggleProductForm {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 20px;
+} 
 
-    .sidebar {
-        height: 100vh;
-        width: 220px;
-        background-color: #2c3e50;
-        position: fixed;
-        left: 0;
-        top: 0;
-        color: white;
-        padding-top: 20px;
-    }
-
-    .sidebar h2 {
-        text-align: center;
-        margin-bottom: 30px;
-    }
-
-    .sidebar a {
-        display: block;
-        padding: 15px 20px;
-        color: white;
-        text-decoration: none;
-    }
-
-    .sidebar a:hover {
-        background-color: #34495e;
-    }
-
-    .header {
-        margin-left: 220px;
-        padding: 20px;
-        background-color: #2980b9;
-        color: white;
-    }
-
-    .content {
-        margin-left: 220px;
-        padding: 30px;
-    }
-
-    .btn {
-        background-color: #28a745;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 16px;
-        margin-bottom: 20px;
-    }
-
-    .action-btn {
-        padding: 6px 14px;
-        border: none;
-        border-radius: 5px;
-        font-size: 14px;
-        margin-right: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    .edit-btn {
-        background-color: #ffc107;
-        color: #212529;
-    }
-
-    .edit-btn:hover {
-        background-color: #e0a800;
-    }
-
-    .delete-btn {
-        background-color: #dc3545;
-        color: white;
-    }
-
-    .delete-btn:hover {
-        background-color: #c82333;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        background-color: white;
-    }
-
-    th, td {
-        padding: 12px;
-        border: 1px solid #ccc;
-        text-align: left;
-    }
-
-    td img {
-        width: 60px;
-        height: auto;
-        border-radius: 4px;
-    }
-
-    input[type="text"],
-    input[type="number"],
-    textarea,
-    select {
-        width: 100%;
-        padding: 10px;
-        margin-top: 5px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        box-sizing: border-box;
-    }
-
-    input[type="file"] {
-        margin-top: 10px;
-    }
-
-    .form-button {
-        margin-top: 20px;
-        background-color: #007bff;
-        color: white;
-        padding: 12px 20px;
-        border: none;
-        border-radius: 5px;
-        width: 100%;
-        cursor: pointer;
-        font-size: 16px;
-    }
-
-    .form-button:hover {
-        background-color: #0056b3;
-    }
-
-    .variant-section {
-        border: 1px solid #ddd;
-        padding: 15px;
-        margin-bottom: 15px;
-        border-radius: 4px;
-    }
-
-    .variant-section h4 {
-        margin-top: 0;
-        color: #333;
-        margin-bottom: 10px;
-    }
-
-    #imagePreview {
-        margin-top: 15px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    #imagePreview img {
-        width: 80px;
-        height: 80px;
-        object-fit: cover;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-    }
-
-    #productFormContainer {
-        display: none;
-        margin-top: 20px;
-    }
+#toggleProductForm:hover {
+    background-color: #218838; 
+}
 </style>
-<script>
-    function toggleForm() {
-        var formContainer = document.getElementById("productFormContainer");
-        if (formContainer.style.display === "none") {
-            formContainer.style.display = "block";
-        } else {
-            formContainer.style.display = "none";
-        }
-    }
-</script>
 </head>
 <body>
+
 <%
-    String success = request.getParameter("success");
     String error = request.getParameter("error");
+    String success = request.getParameter("success");
+
+    String message = "";
+    String messageType = "";     
+
+    if (error != null) {
+        messageType = "error";
+        switch (error) {
+            case "InvalidStock":
+                message = "Stock quantity must be a positive number and not exceed the integer limit.";
+                break;
+            case "InvalidPrice":
+                message = "Invalid price. Please enter a valid numeric value.";
+                break;
+            case "InvalidSize":
+                message = "Size must be a numeric value.";
+                break;
+            case "InvalidColor":
+                message = "Color should not contain only numbers.";
+                break;
+            case "InvalidImage":
+                message = "Uploaded file must be an image (jpg, jpeg, png, gif, bmp).";
+                break;
+            case "ServerError":
+                message = "Something went wrong while processing. Please try again.";
+                break;
+            default:
+                message = "Unknown error occurred.";
+                break;
+        }
+    } else if ("1".equals(success)) {
+        messageType = "success";
+        message = "Product added successfully!";
+    }
 %>
 
-<% if (success != null && success.equals("1")) { %>
-    Product added successfully!
-  
-<% } else if (error != null && error.equals("1")) { %>
-    Failed to add product. Please try again.
-
+<%-- Message Display --%>
+<% if (!message.isEmpty()) { %>
+    <div style="padding: 10px; color: <%= "success".equals(messageType) ? "green" : "red" %>; border: 1px solid <%= "success".equals(messageType) ? "green" : "red" %>; margin-bottom: 15px;">
+        <%= message %>
+    </div>
 <% } %>
-    ProductDAO dao = new ProductDAO();
-    List<ProductModel> products = dao.getAllProducts(); // This should return products with variants + image
-    int index = 1;
-    for (ProductModel product : products) {
-%>
+
 
 <div class="sidebar">
     <h2>Admin Panel</h2>
@@ -220,100 +96,236 @@
     <h1>Product Management</h1>
 </div>
 
+<%
+    List<AddBrandModel> brands = null;
+    List<AddCategory> categories = null;
+    try {
+        AddBrandDAO brandDAO = new AddBrandDAO();
+        brands = brandDAO.getAllBrands();
+
+        CategoryModelDAO categoryDAO = new CategoryModelDAO();
+        categories = categoryDAO.getAllCategories();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    String selectedBrandId = (String) request.getAttribute("brandId");
+    String selectedCategoryId = (String) request.getAttribute("categoryId");
+%>
+
 <div class="content">
-    <button class="btn" onclick="toggleForm()">Add Product</button>
+    <button id="toggleProductForm">Add Product</button>
 
-    <div id="productFormContainer">
-        <h2 style="margin-bottom: 20px;">Add New Product</h2>
-        <form action="${pageContext.request.contextPath}/AddProductServlet" method="post" enctype="multipart/form-data">
-            <label for="productName">Product Name:</label>
-            <input type="text" id="productName" name="productName" required>
+    <!-- Product Form Container (Initially Hidden) -->
+    <div id="productFormWrapper" style="display: none;">
+        <div id="productFormContainer">
+            <h2 style="margin-bottom: 20px;">Add New Product</h2>
+            <form action="${pageContext.request.contextPath}/AddProductServlet" method="post" enctype="multipart/form-data">
+    <label for="productName">Product Name:</label>
+    <input type="text" id="productName" name="productName" class="form-input"
+           value="<%= request.getAttribute("productName") != null ? request.getAttribute("productName") : "" %>">
+    <span style="color:red;"><%= request.getAttribute("productNameError") != null ? request.getAttribute("productNameError") : "" %></span>
 
-            <label for="brandId">Brand:</label>
-            <select id="brandId" name="brandId" required>
-                <option value="">-- Select Brand --</option>
-                <option value="1">Nike</option>
-                <option value="2">Adidas</option>
-            </select>
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="productPrice" class="form-input" step="0.01"
+           value="<%= request.getAttribute("price") != null ? request.getAttribute("price") : "" %>">
+    <span style="color:red;"><%= request.getAttribute("priceError") != null ? request.getAttribute("priceError") : "" %></span>
 
-            <label for="categoryId">Category:</label>
-            <select id="categoryId" name="categoryId" required>
-                <option value="">-- Select Category --</option>
-                <option value="1">Sneakers</option>
-                <option value="2">Running Shoes</option>
-            </select>
+    <label for="brandId">Brand:</label>
+<select id="brandId" name="brandId" class="form-input">
+    <option value="">-- Select Brand --</option>
+    <% if (brands != null) {
+        for (AddBrandModel brand : brands) {
+            String brandIdStr = String.valueOf(brand.getBrandId());
+            String selected = brandIdStr.equals(selectedBrandId) ? "selected" : "";
+    %>
+        <option value="<%= brandIdStr %>" <%= selected %>><%= brand.getBrandName() %></option>
+    <%  }
+       }
+    %>
+</select>
+<span style="color:red;"><%= request.getAttribute("brandIdError") != null ? request.getAttribute("brandIdError") : "" %></span>
 
-            <div class="variant-section">
-                <h4>Variant</h4>
-                <label for="size">Size:</label>
-                <input type="text" id="size" name="variantSize">
+<label for="categoryId">Category:</label>
+<select id="categoryId" name="categoryId" class="form-input">
+    <option value="">-- Select Category --</option>
+    <% if (categories != null) {
+        for (AddCategory category : categories) {
+            String categoryIdStr = String.valueOf(category.getCategoryId());
+            String selected = categoryIdStr.equals(selectedCategoryId) ? "selected" : "";
+    %>
+        <option value="<%= categoryIdStr %>" <%= selected %>><%= category.getCategoryName() %></option>
+    <%  }
+       }
+    %>
+</select>
+<span style="color:red;"><%= request.getAttribute("categoryIdError") != null ? request.getAttribute("categoryIdError") : "" %></span>
 
-                <label for="color">Color:</label>
-                <input type="text" id="color" name="variantColor">
-                <label for="stockQuantity">Stock Quantity:</label>
-                <input type="number" id="stockQuantity" name="variantStock" min="0">
-            </div>
+    <div class="variant-section">
+        <h4>Variant</h4>
+        <label for="size">Size:</label>
+        <input type="text" id="size" name="variantSize" class="form-input"
+               value="<%= request.getAttribute("size") != null ? request.getAttribute("size") : "" %>">
+        <span style="color:red;"><%= request.getAttribute("sizeError") != null ? request.getAttribute("sizeError") : "" %></span>
 
-            <label for="image">Select Images:</label>
-            <input type="file" id="image" name="productImages" accept="image/*" multiple>
+        <label for="color">Color:</label>
+        <input type="text" id="color" name="variantColor" class="form-input"
+               value="<%= request.getAttribute("color") != null ? request.getAttribute("color") : "" %>">
+        <span style="color:red;"><%= request.getAttribute("colorError") != null ? request.getAttribute("colorError") : "" %></span>
 
-            <div id="imagePreview"></div>
-
-            <button type="submit" class="form-button">Add Product</button>
-        </form>
+        <label for="stockQuantity">Stock Quantity:</label>
+        <input type="number" id="stockQuantity" name="variantStock" class="form-input" min="0"
+               value="<%= request.getAttribute("stock") != null ? request.getAttribute("stock") : "" %>">
+        <span style="color:red;"><%= request.getAttribute("stockError") != null ? request.getAttribute("stockError") : "" %></span>
     </div>
 
-    <hr style="margin: 40px 0;">
+    <label for="image">Select Images:</label>
+    <input type="file" id="image" name="productImages" class="form-input" accept="image/*" multiple>
+
+    <div id="imagePreview" class="image-preview"></div>
+
+    <button type="submit" class="form-button">Add Product</button>
+</form>
+
+        </div>
+    </div>
+
+
+<h2>Existing Products</h2>
+
+
+<c:if test="${not empty error}">
+    <div style="color:red; margin-bottom:10px;">
+        <c:choose>
+            <c:when test="${error == 'invalidNumber'}">Price and stock must be non-negative numbers.</c:when>
+            <c:when test="${error == 'invalidInput'}">Invalid number format.</c:when>
+            <c:when test="${error == 'nonPositiveValue'}">Price and stock must be greater than 0.</c:when>
+            <c:when test="${error == 'invalidColor'}">Color must contain only letters and spaces.</c:when>
+            <c:when test="${error == 'updateFailed'}">Failed to update product. Try again.</c:when>
+            <c:when test="${error == 'invalidSize'}">Size must be an integer between 1 and 50.</c:when>
+            <c:when test="${error == 'invalidSizeFormat'}">Size must be a whole number, not a decimal or text.</c:when>
+        </c:choose>
+    </div>
+</c:if>
+<%-- 	<%AddProductDAO productDAO = new AddProductDAO();
+	List<DisplayProductmodel> products = productDAO.getAllProducts();
+	request.setAttribute("products", products);
+	 %>--%>
+	 
+
+
+<table border="1" class="product-table" cellpadding="5" cellspacing="0" style="width:100%; border-collapse:collapse;">
+    <thead>
+        <tr>
+            <th>Product ID</th>
+            <th>Name</th>
+            <th>Brand</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Size</th>
+            <th>Color</th>
+            <th>Stock</th>
+            <th>Images</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <c:forEach var="product" items="${products}">
+            <tr>
+                <!-- Update form -->
+                <form action="${pageContext.request.contextPath}/UpdateProductServlet" method="post" enctype="multipart/form-data">
+                    <td>
+                        <input type="hidden" name="productId" value="${product.productId}" />
+                        ${product.productId}
+                    </td>
+                    <td><input type="text" name="productName" value="${product.productName}" required /></td>
+
+                    <td>
+                        <select name="brandId" required>
+                            <c:forEach var="brand" items="${brands}">
+                                <option value="${brand.brandId}" 
+                                    <c:if test="${brand.brandId == product.brandId}">selected</c:if>>
+                                    ${brand.brandName}
+                                </option>
+                            </c:forEach>
+                        </select>
+                    </td>
+
+                    <td>
+                        <select name="categoryId" required>
+                            <c:forEach var="category" items="${categories}">
+                                <option value="${category.categoryId}" 
+                                    <c:if test="${category.categoryId == product.categoryId}">selected</c:if>>
+                                    ${category.categoryName}
+                                </option>
+                            </c:forEach>
+                        </select>
+                    </td>
+
+                    <td><input type="number" step="0.01" name="productPrice" value="${product.price}" required /></td>
+                    <td><input type="text" name="variantSize" value="${product.variantSize}" /></td>
+                    <td><input type="text" name="variantColor" value="${product.variantColor}" /></td>
+                    <td><input type="number" name="variantStock" value="${product.variantStock}" /></td>
+
+                    <td>
+                        <c:forEach var="img" items="${product.imagePaths}">
+                            <img src="${pageContext.request.contextPath}/${img}" width="50" height="50" alt="Product Image" style="margin:2px;" />
+                        </c:forEach>
+                        <br/>
+                        <input type="file" name="productImages" accept="image/*" multiple />
+                    </td>
+
+                    <td>
+                        <button type="submit">Update</button>
+                </form>
+
+                <!-- Delete form -->
+                <form action="${pageContext.request.contextPath}/DeleteProductServlet" method="post" style="margin-top:5px;">
+                    <input type="hidden" name="productId" value="${product.productId}" />
+                    <button type="submit" onclick="return confirm('Are you sure you want to delete this product?');">Delete</button>
+                </form>
+                    </td>
+            </tr>
+        </c:forEach>
+    </tbody>
+</table>
+
+
+<script>
+    // Toggle Add Product Form
+    document.getElementById('toggleProductForm').addEventListener('click', function () {
+        const formWrapper = document.getElementById('productFormWrapper');
+        formWrapper.style.display = formWrapper.style.display === 'none' ? 'block' : 'none';
+    });
+
+    // Edit Modal
+    function openEditModal(id, name, price) {
+        document.getElementById('editProductId').value = id;
+        document.getElementById('editProductName').value = name;
+        document.getElementById('editProductPrice').value = price;
+        document.getElementById('editModal').style.display = "block";
+    }
+
+    function closeEditModal() {
+        document.getElementById('editModal').style.display = "none";
+    }
     
-    <h2>Existing Products</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Image</th>
-                <th>Product Name</th>
-                <th>Category</th>
-                <th>Price ($)</th>
-                <th>Quantity</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td><img src="images/mouse.jpg" alt="Wireless Mouse"></td>
-                <td>Wireless Mouse</td>
-                <td>Electronics</td>
-                <td>15.99</td>
-                <td>45</td>
-                <td>
-                    <button class="action-btn edit-btn">Edit</button>
-                    <button class="action-btn delete-btn">Delete</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+    window.onclick = function(event) {
+        var modal = document.getElementById('editModal');
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    
+ // Auto-show the Add Product form if there's a message (error or success)
+    window.onload = function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('error') || urlParams.has('success')) {
+            document.getElementById('productFormWrapper').style.display = 'block';
+        }
+    };
+
+</script>
+
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

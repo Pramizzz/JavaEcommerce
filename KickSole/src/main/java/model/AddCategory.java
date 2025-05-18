@@ -3,17 +3,15 @@ package model;
 public class AddCategory {
     private int categoryId;
     private String categoryName;
-    private String categoryDescription;
 
-    // Constructor
-    public AddCategory(int categoryId, String categoryName, String categoryDescription) {
-        this.categoryId = categoryId;
-        this.categoryName = categoryName;
-        this.categoryDescription = categoryDescription;
+    // Default constructor
+    public AddCategory() {
     }
 
-    // Empty Constructor
-    public AddCategory() {
+    // Parameterized constructor
+    public AddCategory(int categoryId, String categoryName) {
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
     }
 
     // Getter and Setter for categoryId
@@ -34,23 +32,5 @@ public class AddCategory {
         this.categoryName = categoryName;
     }
 
-    // Getter and Setter for categoryDescription
-    public String getCategoryDescription() {
-        return categoryDescription;
-    }
-
-    public void setCategoryDescription(String categoryDescription) {
-        this.categoryDescription = categoryDescription;
-    }
-
-    // toString method
-    @Override
-    public String toString() {
-        return "Category{" +
-                "categoryId=" + categoryId +
-                ", categoryName='" + categoryName + '\'' +
-                ", categoryDescription='" + categoryDescription + '\'' +
-                '}';
-    }
+  
 }
-

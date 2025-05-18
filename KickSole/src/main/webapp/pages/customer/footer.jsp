@@ -3,7 +3,7 @@
 <footer>
             <div class="footer-content">
                 <div class="footer-logo">
-                    <img src="./images/Jordan Logo.png" alt="Jordan Logo" />
+                    <img src="${pageContext.request.contextPath}/resources/images/Jordan_Logo.png" alt="Jordan Logo">
                     <h2>Kicksole</h2>
                 </div>
                 <div class="footer-links">

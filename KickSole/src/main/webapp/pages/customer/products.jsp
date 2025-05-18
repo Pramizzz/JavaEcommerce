@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+     <%@ page import="java.util.*,model.DisplayProductmodel,DAO.AddProductDAO" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -47,21 +48,37 @@
             </div>
         </section>
 
-        <section class="products-grid-container">
-            <div class="products-grid" id="productsContainer">
-                <!-- Products will be loaded dynamically via JavaScript -->
-            </div>
-        </section>
+       <%
+AddProductDAO dao = new AddProductDAO(); 
+List<DisplayProductmodel> products = dao.getAllProducts(); 
+%>
 
-        <div class="product-detail-modal" id="productModal">
-            <div class="product-detail-content">
-                <button class="close-modal">&times;</button>
-                <div class="product-detail-container" id="productDetailContainer">
-                    <!-- Product details will be loaded dynamically -->
-                </div>
+<section class="products-grid-container">
+    <div class="products-grid" id="productsContainer">
+        <%
+        for(DisplayProductmodel p : products) {
+        %>
+        <div class="product-card">
+            <div class="product-image">
+                <img src="uploads/<%= p.getImagePaths() %>" alt="<%= p.getProductName()%>">
+            </div>
+            <div class="product-info">
+                <h3><%= p.getProductName() %></h3>
+                <p>Price: ₹<%= p.getPrice() %></p>
+                <p>Quantity: <%= p.getVariantStock()%></p>
+                <p>Brand: <%= p.getBrandId() %></p>
+               
+            </div>
+            <div class="product-actions">
+                
+                
             </div>
         </div>
-    </main>
+        <%
+        }
+        %>
+    </div>
+</section>
 
      <%@ include file="footer.jsp" %>
 

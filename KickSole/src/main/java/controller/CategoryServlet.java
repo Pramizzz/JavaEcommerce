@@ -1,7 +1,8 @@
 package controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,64 +10,97 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import DAO.CategoryModelDAO;
 import model.AddCategory;
 
-/**
- * Servlet implementation class CategoryServlet
- */
-@WebServlet(asyncSupported = true, urlPatterns = { "/CategoryServlet" })
+@WebServlet("/CategoryServlet")
 public class CategoryServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-	
-	protected void processRequest (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.setContentType("text/html;charset=UTF-8");
-		try(PrintWriter out = response.getWriter()){
-			
-			String op = request.getParameter("operation");
-			if(op.trim().equals("addcategory")) {
-				 //add category
-				//fetching category data  
-				String title = request.getParameter("categoryName");
-				String description = request.getParameter("description");
-				
-				AddCategory category = new AddCategory();
-				category.setCategoryName(title);
-				category.setCategoryDescription(description);
-				
-				//category database save:
-				
-			}
-			else if (op.trim().equals("addproducts")){
-				// add products
-			}
-				
-		}
-	}
-	
+    private static final long serialVersionUID = 1L;
+
     public CategoryServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            CategoryModelDAO dao = new CategoryModelDAO();
+            List<AddCategory> categories = dao.getAllCategories();
+            request.setAttribute("categories", categories);
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("message", "Error fetching categories");
+            request.setAttribute("status", "error");
+        }
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
+        request.getRequestDispatcher("/pages/admin/category.jsp").forward(request, response);
+    }
 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String op = request.getParameter("operation");
+
+        if (op == null) {
+            request.setAttribute("message", "No operation specified.");
+            request.setAttribute("status", "error");
+            request.getRequestDispatcher("/pages/admin/category.jsp").forward(request, response);
+            return;
+        }
+
+        try {
+            CategoryModelDAO dao = new CategoryModelDAO();
+
+            if (op.equals("addcategory")) {
+                String title = request.getParameter("categoryName");
+                AddCategory category = new AddCategory(0, title);
+                boolean result = dao.saveCategory(category);
+
+                if (result) {
+                    request.setAttribute("message", "Category added successfully!");
+                    request.setAttribute("status", "success");
+                } else {
+                    request.setAttribute("message", "Error adding category.");
+                    request.setAttribute("status", "error");
+                }
+
+            } else if (op.equals("updatecategory")) {
+                int id = Integer.parseInt(request.getParameter("categoryId"));
+                String title = request.getParameter("categoryName");
+                AddCategory category = new AddCategory(id, title);
+                boolean result = dao.updateCategory(category);
+
+                if (result) {
+                    request.setAttribute("message", "Category updated successfully!");
+                    request.setAttribute("status", "success");
+                } else {
+                    request.setAttribute("message", "Error updating category.");
+                    request.setAttribute("status", "error");
+                }
+
+            } else if (op.equals("deletecategory")) {
+                int id = Integer.parseInt(request.getParameter("categoryId"));
+                boolean result = dao.deleteCategory(id);
+
+                if (result) {
+                    request.setAttribute("message", "Category deleted successfully!");
+                    request.setAttribute("status", "success");
+                } else {
+                    request.setAttribute("message", "Error deleting category.");
+                    request.setAttribute("status", "error");
+                }
+            }
+
+            // After any operation, refresh the category list
+            List<AddCategory> categories = dao.getAllCategories();
+            request.setAttribute("categories", categories);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("message", "Database error occurred.");
+            request.setAttribute("status", "error");
+        }
+
+        request.getRequestDispatcher("/pages/admin/category.jsp").forward(request, response);
+    }
 }
