@@ -23,14 +23,16 @@ public class ViewProductsDAO {
 
             while (rs.next()) {
                 DisplayProductmodel p = new DisplayProductmodel();
-//                p.setBrandId(rs.getInt("product_id"));
-//                p.setName(rs.getString("product_name"));
-//                p.setPrice(rs.getDouble("price"));
-//                p.setQuantity(rs.getInt("quantity"));
-//                p.setImage(rs.getString("image_path"));
-//                p.setBrand(rs.getString("brand_name"));
-//                p.setCategory(rs.getString("category_name"));
-//                products.add(p);
+               p.setBrandId(rs.getInt("product_id"));
+                p.setProductName(rs.getString("product_name"));
+                p.setPrice(rs.getDouble("price"));        
+                p.setVariantStock(rs.getInt("quantity"));
+                p.setVariantSize(rs.getString("price"));   
+                List<String> images = new ArrayList<>();
+                images.add(rs.getString("image_path"));
+                p.setImagePaths(images);
+                products.add(p);
+                
             }
 
         } catch (Exception e) {

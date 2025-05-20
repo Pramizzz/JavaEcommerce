@@ -8,7 +8,7 @@ public class DisplayProductmodel {
     private int brandId;
     private int categoryId;
     private double price;
-
+    private int variantId;
     private String variantSize;
     private String variantColor;
     private int variantStock;
@@ -68,6 +68,14 @@ public class DisplayProductmodel {
         this.variantStock = variantStock;
     }
 
+    public int getVariantId() {
+        return variantId;
+    }
+
+    public void setVariantId(int variantId) {
+        this.variantId = variantId;
+    }
+    
     public List<String> getImagePaths() {
         return imagePaths;
     }

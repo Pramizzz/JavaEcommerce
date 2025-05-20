@@ -79,21 +79,28 @@
 	%>
 
 	<%-- Message Display --%>
-	<%
-	if (!message.isEmpty()) {
-	%>
-	<div
-		style="padding: 10px; color: <%="success".equals(messageType) ? "green" : "red"%>; border: 1px solid <%="success".equals(messageType) ? "green" : "red"%>; margin-bottom: 15px;">
-		<%=message%>
-	</div>
-	<%
-	}
-	%>
+<%
+if (!message.isEmpty()) {
+%>
+<div
+    style="padding: 10px; color: <%= "success".equals(messageType) ? "green" : "red" %>; 
+           border: 1px solid <%= "success".equals(messageType) ? "green" : "red" %>; 
+           margin-bottom: 15px;
+           width: fit-content;
+           margin-left: auto;
+           margin-right: auto;
+           text-align: center;">
+    <%= message %>
+</div>
+<%
+}
+%>
 
 
-	<div class="sidebar">
-		<h2>Admin Panel</h2>
-		<a href="../customer/home.jsp">HomePage</a>
+
+<div class="sidebar">
+    <h2>Admin Panel</h2>
+    <a href="../customer/home.jsp">HomePage</a>
     <a href="../admin/adminDashboard.jsp">Dashboard</a>
     <a href="../admin/category.jsp">Add Category</a>
     <a href="../admin/AddBrand.jsp"> Add Brand</a>
@@ -103,7 +110,7 @@
     <a href="../admin/report.jsp">Reports</a>
     <a href="../admin/setting.jsp">Settings</a>
     <a href="#" onclick="showLogoutModal()">Logout</a>
-	</div>
+</div>
 
 	<div class="header">
 		<h1>Product Management</h1>
@@ -128,8 +135,9 @@
 	%>
 
 	<div class="content">
-		<button id="toggleProductForm">Add Product</button>
-
+		<button id="toggleProductForm">Add Product
+		
+		</button>
 		<!-- Product Form Container (Initially Hidden) -->
 		<div id="productFormWrapper" style="display: none;">
 			<div id="productFormContainer">
@@ -299,8 +307,7 @@
 
 						<!-- Delete form -->
 						<form
-							action="${pageContext.request.contextPath}/DeleteProductServlet"
-							method="get" style="margin-top: 5px;">
+							action="${pageContext.request.contextPath}/DeleteProductServlet" method="get" style="margin-top: 5px;">
 							<input type="hidden" name="productId"
 								value="${product.productId}" />
 							<button type="submit"
@@ -313,44 +320,49 @@
 		</table>
 
 
-		<script>
-			// Toggle Add Product Form
-			document
-					.getElementById('toggleProductForm')
-					.addEventListener(
-							'click',
-							function() {
-								const formWrapper = document
-										.getElementById('productFormWrapper');
-								formWrapper.style.display = formWrapper.style.display === 'none' ? 'block'
-										: 'none';
-							});
+<script>
+    document.getElementById('toggleProductForm').addEventListener('click', function() {
+        const formWrapper = document.getElementById('productFormWrapper');
+        formWrapper.style.display = formWrapper.style.display === 'none' ? 'block' : 'none';
+    });
 
-			function openEditModal(id, name, price) {
-				document.getElementById('editProductId').value = id;
-				document.getElementById('editProductName').value = name;
-				document.getElementById('editProductPrice').value = price;
-				document.getElementById('editModal').style.display = "block";
-			}
+    function openEditModal(id, name, price) {
+        document.getElementById('editProductId').value = id;
+        document.getElementById('editProductName').value = name;
+        document.getElementById('editProductPrice').value = price;
+        document.getElementById('editModal').style.display = "block";
+    }
 
-			function closeEditModal() {
-				document.getElementById('editModal').style.display = "none";
-			}
+    function closeEditModal() {
+        document.getElementById('editModal').style.display = "none";
+    }
 
-			window.onclick = function(event) {
-				var modal = document.getElementById('editModal');
-				if (event.target == modal) {
-					modal.style.display = "none";
-				}
-			}
+    window.onclick = function(event) {
+        var modal = document.getElementById('editModal');
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
 
-			// Auto-show the Add Product form if there's a message (error or success)
-			window.onload = function() {
-				const urlParams = new URLSearchParams(window.location.search);
-				if (urlParams.has('error') || urlParams.has('success')) {
-					document.getElementById('productFormWrapper').style.display = 'block';
-				}
-			};
-		</script>
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('error') || urlParams.has('success')) {
+            document.getElementById('productFormWrapper').style.display = 'block';
+        }
+
+        // Server-side controlled showForm
+        <% if (request.getAttribute("showForm") != null && (Boolean)request.getAttribute("showForm") == true) { %>
+            const formWrapper = document.getElementById('productFormWrapper');
+            if (formWrapper) {
+                formWrapper.style.display = 'block';
+            }
+            const toggleBtn = document.getElementById('toggleProductForm');
+            if (toggleBtn) {
+                toggleBtn.textContent = 'Hide Product Form';
+            }
+        <% } %>
+    }
+</script>
+
 </body>
 </html>

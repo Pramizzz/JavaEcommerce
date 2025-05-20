@@ -56,7 +56,7 @@ public class AddProductServlet extends HttpServlet {
         request.setAttribute("color", color);
         request.setAttribute("stock", stockParam);
         
-        try {
+   /*   try {
             AddProductDAO productDAO = new AddProductDAO();
             List<DisplayProductmodel> products = productDAO.getAllProducts();
 
@@ -69,39 +69,48 @@ public class AddProductServlet extends HttpServlet {
           request.setAttribute("categories", categories);
             request.setAttribute("brands", brands); 
             request.getRequestDispatcher("/pages/admin/AddProducts.jsp").forward(request, response);
+            
 
      } catch (Exception e) {
             e.printStackTrace();
-       }
+       } */
+       
 
 
         // Field validations
         if (isEmpty(productName)) {
             request.setAttribute("productNameError", "Product Name is required.");
+            request.setAttribute("showForm", true);
             hasError = true;
         }
         if (isEmpty(brandIdParam)) {
             request.setAttribute("brandIdError", "Brand is required.");
+            request.setAttribute("showForm", true);
             hasError = true;
         }
         if (isEmpty(categoryIdParam)) {
             request.setAttribute("categoryIdError", "Category is required.");
+            request.setAttribute("showForm", true);
             hasError = true;
         }
         if (isEmpty(priceParam)) {
             request.setAttribute("priceError", "Price is required.");
+            request.setAttribute("showForm", true);
             hasError = true;
         }
         if (isEmpty(size)) {
             request.setAttribute("sizeError", "Size is required.");
+            request.setAttribute("showForm", true);
             hasError = true;
         }
         if (isEmpty(color)) {
             request.setAttribute("colorError", "Color is required.");
+            request.setAttribute("showForm", true);
             hasError = true;
         }
         if (isEmpty(stockParam)) {
             request.setAttribute("stockError", "Stock quantity is required.");
+            request.setAttribute("showForm", true);
             hasError = true;
         }
 
@@ -113,6 +122,7 @@ public class AddProductServlet extends HttpServlet {
             brandId = Integer.parseInt(brandIdParam);
         } catch (NumberFormatException e) {
             request.setAttribute("brandIdError", "Invalid brand.");
+            request.setAttribute("showForm", true);
             hasError = true;
         }
 
@@ -120,6 +130,7 @@ public class AddProductServlet extends HttpServlet {
             categoryId = Integer.parseInt(categoryIdParam);
         } catch (NumberFormatException e) {
             request.setAttribute("categoryIdError", "Invalid category.");
+            request.setAttribute("showForm", true);
             hasError = true;
         }
 
@@ -127,10 +138,12 @@ public class AddProductServlet extends HttpServlet {
             price = Double.parseDouble(priceParam);
             if (price <= 0) {
                 request.setAttribute("priceError", "Price must be greater than 0.");
+                request.setAttribute("showForm", true);
                 hasError = true;
             }
         } catch (NumberFormatException e) {
             request.setAttribute("priceError", "Invalid price format.");
+            request.setAttribute("showForm", true);
             hasError = true;
         }
 
@@ -138,20 +151,24 @@ public class AddProductServlet extends HttpServlet {
             stockQty = Integer.parseInt(stockParam);
             if (stockQty <= 0) {
                 request.setAttribute("stockError", "Stock must be greater than 0.");
+                request.setAttribute("showForm", true);
                 hasError = true;
             }
         } catch (NumberFormatException e) {
             request.setAttribute("stockError", "Invalid stock format.");
+            request.setAttribute("showForm", true);
             hasError = true;
         }
 
         if (!size.matches("\\d+")) {
             request.setAttribute("sizeError", "Size must be a number.");
+            request.setAttribute("showForm", true);
             hasError = true;
         }
 
         if (!color.matches("^[a-zA-Z]+$")) {
             request.setAttribute("colorError", "Color must contain only letters.");
+            request.setAttribute("showForm", true);
             hasError = true;
         }
 
@@ -165,7 +182,7 @@ public class AddProductServlet extends HttpServlet {
         try {
             AddProductDAO dao = new AddProductDAO();
             int productId = dao.insertProduct(productName, brandId, categoryId, price);
-            dao.insertVariant(productId, new ProductVariantModel(size, color, stockQty));
+            dao.insertVariant(productId, new ProductVariantModel( productId, productId, size, color, stockQty, stockParam, price));
 
             String appPath = request.getServletContext().getRealPath("");
             String savePath = appPath + File.separator + UPLOAD_DIR;
@@ -177,6 +194,7 @@ public class AddProductServlet extends HttpServlet {
                     String contentType = part.getContentType();
                     if (!contentType.startsWith("image/")) {
                         response.sendRedirect("pages/admin/AddProducts.jsp?error=InvalidImage");
+                        request.setAttribute("showForm", true);
                         return;
                     }
 
@@ -193,7 +211,10 @@ public class AddProductServlet extends HttpServlet {
             e.printStackTrace();
             response.sendRedirect("pages/admin/AddProducts.jsp?error=Exception");
         }
+
     }
+    
+    
 
     private boolean isEmpty(String value) {
         return value == null || value.trim().isEmpty();

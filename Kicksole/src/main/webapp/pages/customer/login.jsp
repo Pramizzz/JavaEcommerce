@@ -1,5 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+  HttpSession sessionCheck = request.getSession(false);
+if (sessionCheck != null && sessionCheck.getAttribute("username") != null) {
+    String role = (String) sessionCheck.getAttribute("role");
+    if ("admin".equals(role)) {
+        response.sendRedirect(request.getContextPath() + "/pages/admin/adminDashboard.jsp");
+    } else  {
+        response.sendRedirect(request.getContextPath() + "/pages/customer/home.jsp");
+    }
+}
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -117,29 +129,50 @@
         }
     </style>
 </head>
+
+<%
+    String msg = request.getParameter("msg");
+    if ("registered".equals(msg)) {
+%>
+    <script>
+        alert("User registered successfully!");
+    </script>
+<%
+    }
+%>
+
 <body>
+
+
+
     <div class="wrapper">
         <h2 class="form-title">Log In</h2>
         <form method="post" action="<%= request.getContextPath() %>/LoginServlet">
             <div class="input-box">
                 <label for="username">Username</label>
                 <input type="text" name="username" id="username" placeholder="Your Username"
-                       value="<%= request.getParameter("username") != null ? request.getParameter("username") : "" %>">
+                        value="<%= request.getParameter("username") != null ? request.getParameter("username") : "" %>">
+              
                 <c:if test="${status == 'wrongUsername'}"><p>Wrong username.</p></c:if>
                 <c:if test="${status == 'emptyFields'}"><p>Enter all the fields.</p></c:if>
+                
             </div>
 
             <div class="input-box">
                 <label for="password">Password</label>
                 <input type="password" name="password" id="password" placeholder="Password">
-                <c:if test="${status == 'wrongPassword'}"><p>Wrong password.</p></c:if>
-                <c:if test="${status == 'emptyFields'}"><p>Enter all the fields.</p></c:if>
+                            	<c:if test="${status == 'wrongPassword'}"><p>Wrong password.</p></c:if>
+                                <c:if test="${status == 'emptyFields'}"><p>Enter all the fields.</p></c:if>
             </div>
 
             <div class="input-box checkbox">
                 <input type="checkbox" name="remember-me" id="remember-me">
                 <label for="remember-me">Remember me</label>
             </div>
+
+	<c:if test="${status == 'dbError'}">
+        <p style="color:red; text-align:center;">Database connection error. Please try again later.</p>
+    </c:if>
 
             <div class="input-box button">
                 <input type="submit" value="Log in">

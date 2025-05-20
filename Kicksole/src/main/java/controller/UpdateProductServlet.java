@@ -88,7 +88,7 @@ public class UpdateProductServlet extends HttpServlet {
         }
 
         try {
-            ProductVariantModel variant = new ProductVariantModel(sizeStr.trim(), color.trim(), stock);
+            ProductVariantModel variant = new ProductVariantModel(size, stock, sizeStr.trim(), color.trim(), stock, stockStr, price);
             UpdateProductDAO dao = new UpdateProductDAO();
             dao.updateProduct(productId, name.trim(), brandId, categoryId, price);
             dao.updateVariant(productId, variant);

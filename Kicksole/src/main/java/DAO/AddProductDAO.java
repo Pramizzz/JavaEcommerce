@@ -53,9 +53,121 @@ public class AddProductDAO {
         List<DisplayProductmodel> products = new ArrayList<>();
 
         String sql = "SELECT p.product_id, p.product_name, p.brand_id, p.category_id, p.price, " +
-                     "v.size, v.color, v.stock_quantity " +
+                     "v.variant_id, v.size, v.color, v.stock_quantity " +  // Added variant_id here
                      "FROM product p " +
                      "LEFT JOIN product_variant v ON p.product_id = v.product_id";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                DisplayProductmodel product = new DisplayProductmodel();
+                int productId = rs.getInt("product_id");
+
+                product.setProductId(productId);
+                product.setProductName(rs.getString("product_name"));
+                product.setBrandId(rs.getInt("brand_id"));
+                product.setCategoryId(rs.getInt("category_id"));
+                product.setPrice(rs.getDouble("price"));
+                product.setVariantId(rs.getInt("variant_id"));  // Set variant ID here
+                product.setVariantSize(rs.getString("size"));
+                product.setVariantColor(rs.getString("color"));
+                product.setVariantStock(rs.getInt("stock_quantity"));
+
+                product.setImagePaths(getImagePathsByProductId(productId, conn));
+
+                products.add(product);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return products;
+    }
+
+
+    private List<String> getImagePathsByProductId(int productId, Connection conn) {
+        List<String> imagePaths = new ArrayList<>();
+        String sql = "SELECT image_path FROM product_images WHERE product_id = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, productId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    imagePaths.add(rs.getString("image_path"));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return imagePaths;
+    }
+    
+    public List<DisplayProductmodel> getProductsByCategory(int categoryId) {
+        List<DisplayProductmodel> products = new ArrayList<>();
+
+        String sql = "SELECT p.product_id, p.product_name, p.brand_id, p.category_id, p.price, " +
+                     "v.size, v.color, v.stock_quantity " +
+                     "FROM product p " +
+                     "LEFT JOIN product_variant v ON p.product_id = v.product_id " +
+                     "WHERE p.category_id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, categoryId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    DisplayProductmodel product = new DisplayProductmodel();
+                    int productId = rs.getInt("product_id");
+
+                    product.setProductId(productId);
+                    product.setProductName(rs.getString("product_name"));
+                    product.setBrandId(rs.getInt("brand_id"));
+                    product.setCategoryId(rs.getInt("category_id"));
+                    product.setPrice(rs.getDouble("price"));
+                    product.setVariantSize(rs.getString("size"));
+                    product.setVariantColor(rs.getString("color"));
+                    product.setVariantStock(rs.getInt("stock_quantity"));
+
+                    product.setImagePaths(getImagePathsByProductId(productId, conn));
+
+                    products.add(product);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return products;
+    }
+
+  /*  public List<DisplayProductmodel> getProductsSorted(String sort) {
+        String orderByClause = "";
+
+        switch (sort) {
+            case "low-high":
+                orderByClause = "ORDER BY p.price ASC";
+                break;
+            case "high-low":
+                orderByClause = "ORDER BY p.price DESC";
+                break;
+            case "newest":
+                orderByClause = "ORDER BY p.product_id DESC";
+                break;
+            default:
+                orderByClause = ""; 
+        }
+
+        String sql = "SELECT p.product_id, p.product_name, p.brand_id, p.category_id, p.price, " +
+                     "v.size, v.color, v.stock_quantity " +
+                     "FROM product p " +
+                     "LEFT JOIN product_variant v ON p.product_id = v.product_id " +
+                     orderByClause;
+
+        List<DisplayProductmodel> products = new ArrayList<>();
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -78,29 +190,13 @@ public class AddProductDAO {
 
                 products.add(product);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         return products;
-    }
+    }*/
 
-    private List<String> getImagePathsByProductId(int productId, Connection conn) {
-        List<String> imagePaths = new ArrayList<>();
-        String sql = "SELECT image_path FROM product_images WHERE product_id = ?";
-
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, productId);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    imagePaths.add(rs.getString("image_path"));
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return imagePaths;
-    }
+    
+    
 }
