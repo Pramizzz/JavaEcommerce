@@ -129,7 +129,7 @@ if (variantIdStr != null && !variantIdStr.equals("") && !variantIdStr.equalsIgno
   <input type="hidden" name="variantId" value="<%= request.getAttribute("variantId") != null ? request.getAttribute("variantId") : (variant != null ? variant.getVariantId() : "") %>" />
 
   <label for="quantity">Quantity:</label>
-  <input type="number" id="quantity" name="quantity" min="1" value="<%= request.getAttribute("quantity") != null ? request.getAttribute("quantity") : "" %>" />
+  <input  id="quantity" name="quantity" min="1" value="<%= request.getAttribute("quantity") != null ? request.getAttribute("quantity") : "" %>" />
   <p style="color:red;"><%= request.getAttribute("quantityError") != null ? request.getAttribute("quantityError") : "" %></p>
 
   <label for="shippingAddress">Shipping Address:</label>
@@ -137,15 +137,19 @@ if (variantIdStr != null && !variantIdStr.equals("") && !variantIdStr.equalsIgno
   <p style="color:red;"><%= request.getAttribute("addressError") != null ? request.getAttribute("addressError") : "" %></p>
 
   <label for="paymentMethod">Payment Method:</label>
-  <select id="paymentMethod" name="paymentMethod" >
+<select id="paymentMethod" name="paymentMethod">
     <option value="" disabled <%= request.getAttribute("paymentMethod") == null ? "selected" : "" %>>Select payment method</option>
     <option value="Credit Card" <%= "Credit Card".equals(request.getAttribute("paymentMethod")) ? "selected" : "" %>>Credit Card</option>
     <option value="Debit Card" <%= "Debit Card".equals(request.getAttribute("paymentMethod")) ? "selected" : "" %>>Debit Card</option>
     <option value="PayPal" <%= "PayPal".equals(request.getAttribute("paymentMethod")) ? "selected" : "" %>>PayPal</option>
     <option value="Cash on Delivery" <%= "Cash on Delivery".equals(request.getAttribute("paymentMethod")) ? "selected" : "" %>>Cash on Delivery</option>
-  </select>
+</select>
 
-  <p style="color:red;"><%= request.getAttribute("stockError") != null ? request.getAttribute("stockError") : "" %></p>
+
+<% if (request.getAttribute("paymentError") != null) { %>
+    <p style="color:red;"><%= request.getAttribute("paymentError") %></p>
+<% } %>
+
 
   <input type="submit" value="Place Order" />
 </form>

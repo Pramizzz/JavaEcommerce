@@ -3,16 +3,65 @@
 <%@ page
 	import="java.util.*,model.DisplayProductmodel,DAO.AddProductDAO"%>
 	<%@ page import="DAO.CategoryModelDAO, model.AddCategory, model.AddBrandModel, DAO.AddBrandDAO , java.util.List" %>
-	
+	<%@ page import="java.sql.*, database.DatabaseConnection" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+Connection conn = null;
+try {
+    conn = DatabaseConnection.getConnection();
+    if (conn == null || conn.isClosed()) {
+        response.sendRedirect(request.getContextPath() + "/pages/customer/databaseError.jsp");
+        return;
+    }
+} catch (Exception e) {
+    response.sendRedirect(request.getContextPath() + "/pages/customer/databaseError.jsp");
+    return;
+} finally {
+    if (conn != null) {
+        try { conn.close(); } catch (SQLException ignore) {}
+    }
+}
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/css/pagescss/style.css">
 <title>Insert title here</title>
+<style>
+    .error-box {
+        background-color: #ffe6e6;
+        border: 2px solid #cc0000;
+        padding: 20px;
+        border-radius: 8px;
+        width: 60%;
+        margin: 20px auto;
+        text-align: center;
+        font-family: Arial, sans-serif;
+    }
+    .error-box p {
+        color: #cc0000;
+        font-size: 18px;
+    }
+    .error-box button {
+        margin-top: 15px;
+        padding: 10px 20px;
+        background-color: #cc0000;
+        border: none;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .error-box button:hover {
+        background-color: #990000;
+    }
+</style>
 </head>
 <body>
+
+
+
+
 
 <%
 CategoryModelDAO categoryDAO = new CategoryModelDAO();
@@ -25,7 +74,7 @@ if (products == null) {
     products = productDAO.getAllProducts();
 }
 %>
-
+<%@ include file="navbar.jsp" %>
 <main>
     <section class="products-header">
         <h2>Jordan Collection</h2>

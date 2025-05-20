@@ -1,7 +1,3 @@
-/DAO/
 /controller/
-/database/
-/filter/
-/lib/
+/DAO/
 /model/
-/utils/

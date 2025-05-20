@@ -98,19 +98,15 @@ if (!message.isEmpty()) {
 
 
 
-<div class="sidebar">
-    <h2>Admin Panel</h2>
-    <a href="../customer/home.jsp">HomePage</a>
-    <a href="../admin/adminDashboard.jsp">Dashboard</a>
-    <a href="../admin/category.jsp">Add Category</a>
-    <a href="../admin/AddBrand.jsp"> Add Brand</a>
-    <a href="../admin/AddProducts.jsp">Products</a>
-    <a href="../admin/user.jsp">Manage Users</a>
-    <a href="../admin/order.jsp">Orders</a>
-    <a href="../admin/report.jsp">Reports</a>
-    <a href="../admin/setting.jsp">Settings</a>
-    <a href="#" onclick="showLogoutModal()">Logout</a>
-</div>
+	<div class="sidebar">
+		<h2>Admin Panel</h2>
+		<a href="../admin/adminDashbord.jsp">Dashboard</a> <a
+			href="../admin/category.jsp">Add Category</a> <a
+			href="../admin/products.jsp">Products</a> <a href="../admin/user.jsp">Manage
+			Users</a> <a href="../admin/order.jsp">Orders</a> <a
+			href="../admin/report.jsp">Reports</a> <a href="../admin/setting.jsp">Settings</a>
+		<a href="../home.jsp">Logout</a>
+	</div>
 
 	<div class="header">
 		<h1>Product Management</h1>
@@ -321,9 +317,17 @@ if (!message.isEmpty()) {
 
 
 <script>
-    document.getElementById('toggleProductForm').addEventListener('click', function() {
+    document.getElementById('toggleProductForm').addEventListener('click', function () {
         const formWrapper = document.getElementById('productFormWrapper');
-        formWrapper.style.display = formWrapper.style.display === 'none' ? 'block' : 'none';
+        const toggleBtn = document.getElementById('toggleProductForm');
+
+        if (formWrapper.style.display === 'none' || formWrapper.style.display === '') {
+            formWrapper.style.display = 'block';
+            toggleBtn.textContent = 'Hide Product Form';
+        } else {
+            formWrapper.style.display = 'none';
+            toggleBtn.textContent = 'Add Product';
+        }
     });
 
     function openEditModal(id, name, price) {
@@ -344,25 +348,28 @@ if (!message.isEmpty()) {
         }
     }
 
-    window.onload = function() {
+    window.onload = function () {
         const urlParams = new URLSearchParams(window.location.search);
+        const formWrapper = document.getElementById('productFormWrapper');
+        const toggleBtn = document.getElementById('toggleProductForm');
+
         if (urlParams.has('error') || urlParams.has('success')) {
-            document.getElementById('productFormWrapper').style.display = 'block';
+            formWrapper.style.display = 'block';
+            toggleBtn.textContent = 'Hide Product Form';
         }
 
         // Server-side controlled showForm
         <% if (request.getAttribute("showForm") != null && (Boolean)request.getAttribute("showForm") == true) { %>
-            const formWrapper = document.getElementById('productFormWrapper');
             if (formWrapper) {
                 formWrapper.style.display = 'block';
             }
-            const toggleBtn = document.getElementById('toggleProductForm');
             if (toggleBtn) {
                 toggleBtn.textContent = 'Hide Product Form';
             }
         <% } %>
     }
 </script>
+
 
 </body>
 </html>

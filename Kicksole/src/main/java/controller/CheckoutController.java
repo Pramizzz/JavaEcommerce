@@ -51,6 +51,11 @@ public class CheckoutController extends HttpServlet {
             request.setAttribute("addressError", "Address must contain only letters, spaces, and commas.");
             hasError = true;
         }
+        
+        if (paymentMethod == null || paymentMethod.trim().isEmpty()) {
+            request.setAttribute("paymentError", "Payment method is required.");
+            hasError = true;
+        }
 
         int quantity = 0;
         int variantId = 0;
@@ -128,6 +133,7 @@ public class CheckoutController extends HttpServlet {
             boolean stockUpdated = variantDAO.reduceStock(variantId, quantity);
 
             if (stockUpdated) {
+            	 session.setAttribute("orderSuccessMessage", "Your order has been placed successfully!");
                 response.sendRedirect("pages/customer/orderSucess.jsp");
             } else {
                 request.setAttribute("stockError", "Failed to update stock.");
