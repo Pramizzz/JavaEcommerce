@@ -1,15 +1,13 @@
 package controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
-
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
 import DAO.LoginModelDAO;
-import model.LoginModel;
+import model.User;
 import utils.PasswordUtil;
 
 @WebServlet("/LoginServlet")
@@ -20,45 +18,37 @@ public class LoginServlet extends HttpServlet {
         super();
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-    	
-    }
-    
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        PrintWriter out = response.getWriter();
 
         if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
             request.setAttribute("status", "emptyFields");
-            RequestDispatcher dispatcher = request.getRequestDispatcher(request.getContextPath()+"/pages/customer/login.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/customer/login.jsp");
             dispatcher.forward(request, response);
             return;
         }
 
         String hashedPassword = PasswordUtil.hashPassword(password);
-        LoginModel login = new LoginModel(username, hashedPassword);
+        LoginModelDAO loginDAO = new LoginModelDAO();
 
         try {
-            LoginModelDAO loginDAO = new LoginModelDAO();
-            String role = loginDAO.checkLogin(login);
+            String role = loginDAO.checkLogin(username, hashedPassword);
 
             if (role != null) {
-                HttpSession session = request.getSession();
-                session.setAttribute("username", username);
-                session.setAttribute("role", role);
-                Cookie sessionCookie = new Cookie("JSESSIONID", session.getId());
-                sessionCookie.setHttpOnly(true);
-                sessionCookie.setMaxAge(-1); 
-                response.addCookie(sessionCookie);
+                // Get full user info for session
+                User loggedInUser = loginDAO.getUserByUsername(username);
 
-                if (role.equals("admin")) {
-                    response.sendRedirect(request.getContextPath()+"/pages/admin/adminDashboard.jsp");
+                HttpSession session = request.getSession();
+                session.setAttribute("loggedInUser", loggedInUser);
+                session.setAttribute("role", role);
+
+                if ("admin".equalsIgnoreCase(role)) {
+                    response.sendRedirect(request.getContextPath() + "/pages/admin/adminDashboard.jsp");
                 } else {
-                    response.sendRedirect(request.getContextPath()+"/pages/customer/home.jsp");
+                    response.sendRedirect(request.getContextPath() + "/pages/customer/home.jsp");
                 }
             } else {
                 if (!loginDAO.doesUsernameExist(username)) {
@@ -66,12 +56,12 @@ public class LoginServlet extends HttpServlet {
                 } else {
                     request.setAttribute("status", "wrongPassword");
                 }
-                RequestDispatcher dispatcher = request.getRequestDispatcher(request.getContextPath()+"/pages/customer/login.jsp");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/customer/login.jsp");
                 dispatcher.forward(request, response);
             }
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
-            out.println("<script>alert('Database error occurred!'); window.location='/pages/customer/login.jsp';</script>");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Database error occurred");
         }
     }
 }

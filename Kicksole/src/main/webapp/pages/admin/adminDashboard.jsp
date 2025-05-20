@@ -50,6 +50,7 @@
 </style>
 </head>
 <body>
+<
  
 <div class="sidebar">
     <h2>Admin Panel</h2>
@@ -66,7 +67,8 @@
 </div>
 
 <div class="header">
-    <h1>Welcome, Admin</h1>
+    <h1>Dashboard</h1>
+    <div class="welcome">Welcome, Admin</div>
 </div>
 
 <div class="content">
