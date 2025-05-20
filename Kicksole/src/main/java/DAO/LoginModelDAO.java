@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import database.DatabaseConnection;
 import model.LoginModel;
+import model.User;
 
 public class LoginModelDAO {
     private Connection con;
@@ -54,6 +55,26 @@ public class LoginModelDAO {
 
         return userId;
     }
-  
 
+    public User getUserByUsername(String username) throws SQLException {
+        User user = null;
+        String sql = "SELECT id, name, username, email, phone, role FROM users WHERE username = ?";
+
+        try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                user = new User();
+                user.setId(rs.getInt("id"));
+                user.setName(rs.getString("name"));
+                user.setUsername(rs.getString("username"));
+                user.setEmail(rs.getString("email"));
+                user.setPhone(rs.getString("phone"));
+                user.setRole(rs.getString("role"));
+            }
+        }
+
+        return user;
+    }
 }

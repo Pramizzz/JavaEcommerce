@@ -2,7 +2,7 @@
 <%@ page import="model.User" %>
 
 <%
-    User admin = (User) session.getAttribute("loggedInUser");
+    User admin = (User) session.getAttribute("admin");
 %>
 
 <!DOCTYPE html>
@@ -333,22 +333,23 @@ body {
         </div>
 
         <div class="profile-info">
-            <%
-                if (admin != null && "admin".equalsIgnoreCase(admin.getRole())) {
-            %>
-                <div><strong>Name:</strong> <%= admin.getName() != null ? admin.getName() : "N/A" %></div>
-                <div><strong>Username:</strong> <%= admin.getUsername() != null ? admin.getUsername() : "N/A" %></div>
-                <div><strong>Email:</strong> <%= admin.getEmail() != null ? admin.getEmail() : "N/A" %></div>
-                <div><strong>Phone:</strong> <%= admin.getPhone() != null ? admin.getPhone() : "N/A" %></div>
-                <div><strong>Role:</strong> <%= admin.getRole() != null ? admin.getRole() : "N/A" %></div>
-            <%
-                } else {
-            %>
-                <p style="color: red;">Admin is not logged in.</p>
-            <%
-                }
-            %>
-        </div>
+    <%
+        if (admin != null && "admin".equalsIgnoreCase(admin.getRole())) {
+    %>
+        <div><strong>Name:</strong> <%= admin.getName() != null ? admin.getName() : "N/A" %></div>
+        <div><strong>Username:</strong> <%= admin.getUsername() != null ? admin.getUsername() : "N/A" %></div>
+        <div><strong>Email:</strong> <%= admin.getEmail() != null ? admin.getEmail() : "N/A" %></div>
+        <div><strong>Phone:</strong> <%= admin.getPhone() != null ? admin.getPhone() : "N/A" %></div>
+        <div><strong>Role:</strong> <%= admin.getRole() != null ? admin.getRole() : "N/A" %></div>
+    <%
+        } else {
+    %>
+        <p style="color: red;">Admin is not logged in.</p>
+    <%
+        }
+    %>
+</div>
+
 
         <div class="button-group">
             <button class="btn edit-btn" onclick="toggleSection('editProfile')">Edit Profile</button>

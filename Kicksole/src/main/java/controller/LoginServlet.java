@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import model.User;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 
@@ -67,7 +68,26 @@ public class LoginServlet extends HttpServlet {
                 int userId = loginDAO.getUserIdByUsername(username); // <-- You need to implement this method
                 session.setAttribute("customerId", userId);
 
-                
+                if (role != null) {
+                    HttpSession session3 = request.getSession();
+                    session.setAttribute("username", username);
+                    session.setAttribute("role", role);
+
+                    int userId1 = loginDAO.getUserIdByUsername(username);
+                    session.setAttribute("customerId", userId1);
+
+                    // ✅ Add admin object in session if role is admin
+                    if ("admin".equalsIgnoreCase(role)) {
+                        session.setMaxInactiveInterval(15 * 60); 
+
+                        User admin = loginDAO.getUserByUsername(username); // <-- Get admin details
+                        session.setAttribute("admin", admin);              // <-- Store in session
+                    } else {
+                        session.setMaxInactiveInterval(60 * 60); 
+                    }
+
+                    // (rest of your existing code continues below unchanged...)
+
                 
                 if ("admin".equalsIgnoreCase(role)) {
                     session.setMaxInactiveInterval(15 * 60); 
@@ -112,11 +132,13 @@ public class LoginServlet extends HttpServlet {
                 dispatcher.forward(request, response);
             }
 
-        } catch (ClassNotFoundException | SQLException e) {
+            }}
+        catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
             request.setAttribute("status", "dbError");
             RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/customer/login.jsp");
             dispatcher.forward(request, response);
         }
+        
     }
 }
