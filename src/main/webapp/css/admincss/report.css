@@ -1,0 +1,97 @@
+/* ===== Reset & Base ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6fa;
+    color: #333;
+}
+
+/* ===== Header ===== */
+.header {
+    margin-left: 85px; /* If sidebar is fixed at 230px */
+    padding: 30px 0;
+    background-color: #34495e;
+    color: white;
+    text-align: center;
+    font-size: 30px;
+    font-weight: 600;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== Content Area ===== */
+.content {
+    margin-left: 230px;
+    min-height: calc(100vh - 100px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background-color: #f4f6fa;
+}
+
+/* ===== Centering Card Container ===== */
+.stat-card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+    max-width: 1200px;
+    width: 100%;
+    padding: 20px;
+}
+
+/* ===== Stat Card Styling ===== */
+.stat-card {
+    background: #ffffff;
+    padding: 24px 20px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    flex: 1 1 260px;
+    max-width: 300px;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+.stat-card h4 {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-card p {
+    font-size: 20px;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+
+/* ===== Responsive Design ===== */
+@media (max-width: 768px) {
+    .header,
+    .content {
+        margin-left: 0;
+        padding: 20px;
+    }
+
+    .stat-card-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .stat-card {
+        width: 90%;
+        max-width: 95%;
+    }
+}

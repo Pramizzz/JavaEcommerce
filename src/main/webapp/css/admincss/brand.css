@@ -1,0 +1,131 @@
+@charset "UTF-8";
+.content {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin: 30px auto;
+    width: 85%;
+    padding: 40px;
+    box-sizing: border-box;
+}
+
+/* Form styling */
+.content form {
+    background-color: #f9f9f9;
+    padding: 20px;
+    margin-bottom: 30px;
+    border-radius: 6px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Input and button styling */
+.content input[type="text"] {
+    padding: 10px;
+    width: 60%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.content .form-button,
+.content button {
+    padding: 8px 16px;
+    background-color: #2980b9;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.content .form-button:hover,
+.content button:hover {
+    background-color: #1f6391;
+}
+
+/* Table styling */
+.content table {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+    width: 100%;
+    margin-top: 30px;
+    font-size: 14px;
+}
+
+.content th {
+    background-color: #e6e6e6;
+    font-weight: bold;
+    color: #333;
+}
+
+.content td,
+.content th {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+}
+
+.content h2 {
+    margin-top: 40px;
+    color: #333;
+    font-size: 20px;
+}
+
+/* Responsive Enhancements */
+@media (max-width: 768px) {
+    .content {
+        width: 95%;
+        padding: 20px;
+    }
+
+    .content input[type="text"] {
+        width: 100%;
+        font-size: 13px;
+    }
+
+    .content .form-button,
+    .content button {
+        width: 100%;
+        font-size: 13px;
+    }
+
+    .content table {
+        font-size: 13px;
+    }
+
+    .content td,
+    .content th {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .content {
+        padding: 15px;
+    }
+
+    .content form {
+        padding: 15px;
+    }
+
+    .content table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .content input[type="text"],
+    .content .form-button,
+    .content button {
+        font-size: 12px;
+    }
+
+    .content h2 {
+        font-size: 18px;
+        text-align: center;
+    }
+}
