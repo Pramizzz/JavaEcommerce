@@ -9,6 +9,8 @@ public class CartItem {
     private int quantity;
     private String variantSize;
 
+    public CartItem() {}
+    
     public CartItem(int variantId, String productName, String imagePath, double price, int quantity, String variantSize) {
         this.variantId = variantId;
         this.productName = productName;
