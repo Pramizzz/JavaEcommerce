@@ -197,6 +197,50 @@ public class AddProductDAO {
         return products;
     }*/
 
-    
+    public DisplayProductmodel getProductByVariantId(int variantId) {
+        DisplayProductmodel product = null;
+
+        String query = "SELECT p.product_name, v.size, v.color, v.stock_quantity, p.price, i.image_path " +
+                       "FROM product p " +
+                       "JOIN product_variant v ON p.product_id = v.product_id " +
+                       "LEFT JOIN product_images i ON p.product_id = i.product_id " +
+                       "WHERE v.variant_id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, variantId);
+            ResultSet rs = stmt.executeQuery();
+
+            List<String> imagePaths = new ArrayList<>();
+            boolean firstRow = true;
+
+            while (rs.next()) {
+                if (firstRow) {
+                    product = new DisplayProductmodel();
+                    product.setProductName(rs.getString("product_name"));
+                    product.setVariantSize(rs.getString("size"));
+                    product.setVariantColor(rs.getString("color"));
+                    product.setVariantStock(rs.getInt("stock_quantity"));
+                    product.setPrice(rs.getDouble("price"));
+                    firstRow = false;
+                }
+
+                String imagePath = rs.getString("image_path");
+                if (imagePath != null && !imagePath.isEmpty()) {
+                    imagePaths.add(imagePath);
+                }
+            }
+
+            if (product != null) {
+                product.setImagePaths(imagePaths);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return product;
+    }
     
 }

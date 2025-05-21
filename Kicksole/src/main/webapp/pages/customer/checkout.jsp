@@ -1,31 +1,36 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="javax.servlet.http.*, javax.servlet.*, java.sql.*, model.ProductVariantModel, DAO.ProductVariantDAO" %>
+<%@ page import="javax.servlet.http.*, javax.servlet.*, java.sql.*, java.util.*, model.*, DAO.*" %>
 <%
-	if (session == null || session.getAttribute("username") == null) {
-	    String variantId = request.getParameter("variantId");
-	    session = request.getSession(); // recreate session if needed
-	    session.setAttribute("redirectAfterLogin", "pages/customer/checkout.jsp?variantId=" + variantId);
-	    response.sendRedirect(request.getContextPath() + "/pages/customer/login.jsp");
-	    return;
-	}
-String variantIdStr = request.getParameter("variantId");
-int variantId = 0;
-if (variantIdStr != null && !variantIdStr.equals("") && !variantIdStr.equalsIgnoreCase("null")) {
-    try {
-        variantId = Integer.parseInt(variantIdStr);
-    } catch (NumberFormatException e) {
-        e.printStackTrace();
+    if (session == null || session.getAttribute("username") == null) {
+        response.sendRedirect(request.getContextPath() + "/pages/customer/login.jsp");
+        return;
     }
-}
 
+    Integer userId = (Integer) session.getAttribute("userId");
+    String variantIdStr = request.getParameter("variantId");
 
-    // Optional: Get product variant details from DAO (you must have a VariantDAO)
-    ProductVariantModel variant = null;
-    try {
-        ProductVariantDAO variantDAO = new ProductVariantDAO();
-        variant = variantDAO.getVariantById(variantId);
-    } catch (Exception e) {
-        e.printStackTrace();
+    ProductVariantModel singleVariant = null;
+    List<CartItem> cartItems = null;
+    double totalPrice = 0;
+
+    if (variantIdStr != null && !variantIdStr.isEmpty()) {
+        try {
+            int variantId = Integer.parseInt(variantIdStr);
+            ProductVariantDAO variantDAO = new ProductVariantDAO();
+            singleVariant = variantDAO.getVariantById(variantId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    } else {
+        try {
+            CartDAO cartDAO = new CartDAO();
+            cartItems = cartDAO.getCartItemsByUserId(userId);
+            for (CartItem item : cartItems) {
+                totalPrice += item.getPrice() * item.getQuantity();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 %>
 
@@ -40,16 +45,21 @@ if (variantIdStr != null && !variantIdStr.equals("") && !variantIdStr.equalsIgno
             padding: 20px;
         }
         .checkout-form {
-            max-width: 500px;
+            max-width: 600px;
             margin: auto;
             padding: 25px;
             border: 1px solid #ccc;
             border-radius: 8px;
+            background-color: #fafafa;
         }
-        input[type=number], input[type=submit] {
+        .product-item {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        input[type=number], input[type=submit], textarea, select {
             width: 100%;
             padding: 10px;
-            margin-top: 15px;
+            margin-top: 10px;
             border: 1px solid #aaa;
             border-radius: 5px;
         }
@@ -57,6 +67,7 @@ if (variantIdStr != null && !variantIdStr.equals("") && !variantIdStr.equalsIgno
             background-color: #28a745;
             color: white;
             border: none;
+            font-weight: bold;
         }
         h2 {
             text-align: center;
@@ -68,99 +79,51 @@ if (variantIdStr != null && !variantIdStr.equals("") && !variantIdStr.equalsIgno
 <div class="checkout-form">
     <h2>Checkout</h2>
 
-<% if (variant != null) { %>
-    <style>
-  form {
-    max-width: 400px;
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #fafafa;
-    font-family: Arial, sans-serif;
-  }
+    <form action="<%= request.getContextPath() %>/CheckoutController" method="post">
 
-  form p {
-    font-size: 16px;
-    margin: 10px 0;
-  }
+    <% if (singleVariant != null) { %>
+        <!-- Single Product Checkout -->
+        <div class="product-item">
+            <p><strong>Product:</strong> <%= singleVariant.getProductName() %></p>
+            <p><strong>Variant:</strong> <%= singleVariant.getSize() %> / <%= singleVariant.getColor() %></p>
+            <p><strong>Price:</strong> ₹<%= singleVariant.getPrice() %></p>
+            <input type="hidden" name="variantId" value="<%= singleVariant.getVariantId() %>" />
+        </div>
 
-  label {
-    display: block;
-    margin-top: 15px;
-    font-weight: bold;
-  }
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" name="quantity" min="1" required />
+    <% } else if (cartItems != null && !cartItems.isEmpty()) { %>
+        <!-- Full Cart Checkout -->
+        <% for (CartItem item : cartItems) { %>
+            <div class="product-item">
+                <p><strong><%= item.getProductName() %></strong></p>
+                <p>Size: <%= item.getVariantSize() %></p>
+                <p>Price: ₹<%= item.getPrice() %> × <%= item.getQuantity() %> = ₹<%= item.getPrice() * item.getQuantity() %></p>
+                <input type="hidden" name="cartVariantIds[]" value="<%= item.getVariantId() %>" />
+<input type="hidden" name="quantities[]" value="<%= item.getQuantity() %>" />
 
-  input[type="number"],
-  textarea,
-  select {
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    font-size: 14px;
-  }
+            </div>
+        <% } %>
+        <p style="text-align:right;"><strong>Total: ₹<%= String.format("%.2f", totalPrice) %></strong></p>
+    <% } else { %>
+        <p style="color:red;">Your cart is empty or no product selected!</p>
+    <% } %>
 
-  input[type="submit"] {
-    margin-top: 20px;
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    border: none;
-    color: white;
-    font-weight: bold;
-    font-size: 16px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
+    <!-- Common fields -->
+    <label for="shippingAddress">Shipping Address:</label>
+    <textarea id="shippingAddress" name="shippingAddress" rows="3" required></textarea>
 
-  input[type="submit"]:hover {
-    background-color: #0056b3;
-  }
-</style>
+    <label for="paymentMethod">Payment Method:</label>
+    <select id="paymentMethod" name="paymentMethod" required>
+        <option value="">Select payment method</option>
+        <option value="Credit Card">Credit Card</option>
+        <option value="Debit Card">Debit Card</option>
+        <option value="PayPal">PayPal</option>
+        <option value="Cash on Delivery">Cash on Delivery</option>
+    </select>
 
-<form action="<%= request.getContextPath() %>/CheckoutController" method="post">
-  <p><strong>Product Name:</strong> <%= variant != null ? variant.getProductName() : "" %></p>
-  <p><strong>Variant:</strong> <%= variant != null ? variant.getSize() : "" %> / <%= variant != null ? variant.getColor() : "" %></p>
-  <p><strong>Price:</strong> $<%= variant != null ? variant.getPrice() : "" %></p>
-
-  <input type="hidden" name="variantId" value="<%= request.getAttribute("variantId") != null ? request.getAttribute("variantId") : (variant != null ? variant.getVariantId() : "") %>" />
-
-  <label for="quantity">Quantity:</label>
-  <input  id="quantity" name="quantity" min="1" value="<%= request.getAttribute("quantity") != null ? request.getAttribute("quantity") : "" %>" />
-  <p style="color:red;"><%= request.getAttribute("quantityError") != null ? request.getAttribute("quantityError") : "" %></p>
-
-  <label for="shippingAddress">Shipping Address:</label>
-  <textarea id="shippingAddress" name="shippingAddress" rows="3" ><%= request.getAttribute("shippingAddress") != null ? request.getAttribute("shippingAddress") : "" %></textarea>
-  <p style="color:red;"><%= request.getAttribute("addressError") != null ? request.getAttribute("addressError") : "" %></p>
-
-  <label for="paymentMethod">Payment Method:</label>
-<select id="paymentMethod" name="paymentMethod">
-    <option value="" disabled <%= request.getAttribute("paymentMethod") == null ? "selected" : "" %>>Select payment method</option>
-    <option value="Credit Card" <%= "Credit Card".equals(request.getAttribute("paymentMethod")) ? "selected" : "" %>>Credit Card</option>
-    <option value="Debit Card" <%= "Debit Card".equals(request.getAttribute("paymentMethod")) ? "selected" : "" %>>Debit Card</option>
-    <option value="PayPal" <%= "PayPal".equals(request.getAttribute("paymentMethod")) ? "selected" : "" %>>PayPal</option>
-    <option value="Cash on Delivery" <%= "Cash on Delivery".equals(request.getAttribute("paymentMethod")) ? "selected" : "" %>>Cash on Delivery</option>
-</select>
-
-
-<% if (request.getAttribute("paymentError") != null) { %>
-    <p style="color:red;"><%= request.getAttribute("paymentError") %></p>
-<% } %>
-
-
-  <input type="submit" value="Place Order" />
-</form>
-
-
-
-<% } else { %>
-    <p style="color:red;">Invalid or missing product variant!</p>
-<% } %>
-
-
+    <input type="submit" value="Place Order" />
+    </form>
 </div>
 
 </body>

@@ -277,7 +277,7 @@ if (selectedBrandId == null) {
     <button type="submit">Add to Cart</button>
 </form>
 <!-- View Product Button -->
-<form action="<%= request.getContextPath() %>/pages/customer/ProductDescription.jsp" method="get" style="display:inline;">
+<form action="<%= request.getContextPath() %>/ShowProductDetailsServlet" method="get" style="display:inline;">
     <input type="hidden" name="variantId" value="<%= p.getVariantId() %>" />
     <button type="submit" class="view-product-btn">View Product</button>
 </form>

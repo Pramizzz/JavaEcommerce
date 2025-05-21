@@ -1,24 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ page import="DAO.DashboardDAO" %>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="../../css/admincss/admindashboard.css">
+<link rel="stylesheet" href="<%= request.getContextPath() %>/css/admincss/admindashboard.css">
+
 <title>Kicksole Admin Dashboard</title>
 <style>
-/* Modal Style */
-#logoutModal {
-    display: none;
-    position: fixed;
-    z-index: 9999;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
-}
+
 
 .modal-content {
     background-color: #fff;
@@ -50,8 +42,6 @@
 </style>
 </head>
 <body>
-
- 
 <%@ include file="sidebar.jsp" %>
 
 <div class="header">
@@ -59,58 +49,70 @@
     <div class="welcome">Welcome, Admin</div>
 </div>
 
-<div class="content">
-    <div class="card">
-        <h2>Quick Stats</h2>
-        <p>Categories: <strong>12</strong></p>
-        <p>Products: <strong>250</strong></p>
-        <p>Users: <strong>1,450</strong></p>
-        <p>Pending Orders: <strong>7</strong></p>
-    </div>
 
+
+<%
+    int totalCategories = 0;
+    int totalBrands = 0;
+    int totalProducts = 0;
+    int totalUsers = 0;
+    int totalOrders =0;
+    int pendingOrders = 0;
+    int shippedOrders = 0;
+    int canceledOrders = 0;
+    int deliveredOrders = 0;
+   
+
+    try {
+        DashboardDAO dao = new DashboardDAO();
+
+        totalCategories = dao.getTotalCategories();
+        totalBrands = dao.getTotalBrands();
+        totalProducts = dao.getTotalProducts();
+        totalUsers = dao.getTotalUsers();
+        totalOrders = dao.getTotalOrders();
+        shippedOrders = dao.getShippedOrders();
+        canceledOrders = dao.getCancelledOrders();
+        deliveredOrders = dao.getDeliveredOrders();
+        pendingOrders=dao.getPendingOrders();
+  
+    } catch (Exception e) {
+        out.println("<p style='color:red;'>Error fetching dashboard data: " + e.getMessage() + "</p>");
+    }
+%>
+
+<div class="content">
+   <div class="card">
+    <h2>Quick Stats</h2>
+    <p>Categories: <strong><%= totalCategories %></strong></p>
+    <p>Brands: <strong><%= totalBrands %></strong></p>
+    <p>Products: <strong><%= totalProducts %></strong></p>
+    <p>Users: <strong><%= totalUsers %></strong></p>
+    
+
+</div>
     <div class="card">
         <h3>Recent Orders</h3>
         <ul>
-            <li>Order #1023 - $59.99 - <em>Pending</em></li>
-            <li>Order #1022 - $119.49 - <em>Shipped</em></li>
-            <li>Order #1021 - $24.00 - <em>Delivered</em></li>
+     <p>Total Orders: <strong><%= totalOrders %></strong></p>
+    <p>Pending Orders: <strong><%= pendingOrders %></strong></p>
+    <p>Shipped Orders: <strong><%= shippedOrders %></strong></p>
+    <p>Canceled Orders: <strong><%= canceledOrders %></strong></p>
+    <p>Delivered Orders: <strong><%= deliveredOrders %></strong></p>
         </ul>
     </div>
 
     <div class="card">
         <h3>Admin Actions</h3>
         <ul>
-            <li><a href="#">➕ Add New Category</a></li>
-            <li><a href="#">📦 Add New Product</a></li>
-            <li><a href="#">👥 Manage Users</a></li>
-            <li><a href="#">📊 View Reports</a></li>
+            <li><a href="<%= request.getContextPath() %>/pages/admin/category.jsp">➕ Add New Category</a></li>
+            <li><a href="<%= request.getContextPath() %>/pages/admin/AddProducts.jsp">📦 Add New Product</a></li>
+            <li><a href="<%= request.getContextPath() %>/pages/admin/user.jsp">👥 Manage Users</a></li>
+            <li><a href="report.jsp">📊 View Reports</a></li>
         </ul>
     </div>
 </div>
 
-<!-- Logout Confirmation Modal -->
-<div id="logoutModal">
-    <div class="modal-content">
-        <p>Are you sure you want to logout?</p>
-        <button id="yesBtn" onclick="confirmLogout()">Yes</button>
-        <button id="noBtn" onclick="hideLogoutModal()">No</button>
-    </div>
-</div>
-
-<script>
-function showLogoutModal() {
-    document.getElementById("logoutModal").style.display = "block";
-}
-
-function hideLogoutModal() {
-    document.getElementById("logoutModal").style.display = "none";
-}
-
-function confirmLogout() {
-	window.location.href = '<%= request.getContextPath() %>/LogoutServlet';
-
-}
-</script>
 
 </body>
 </html>

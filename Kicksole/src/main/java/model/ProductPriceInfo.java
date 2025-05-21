@@ -6,9 +6,15 @@ public class ProductPriceInfo {
     private int quantity;
     private String productName;  
     private String status;       
+    private String paymentMethod;
 
-
-    public int getOrderId() {
+    public String getPaymentMethod() {
+		return paymentMethod;
+	}
+	public void setPaymentMethod(String payment_method) {
+		this.paymentMethod = payment_method;
+	}
+	public int getOrderId() {
         return orderId;
     }
     public void setOrderId(int orderId) {

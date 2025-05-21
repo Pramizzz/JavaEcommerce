@@ -6,7 +6,7 @@ public class ProductVariantModel {
     private String size;
     private String color;
     private int stockQuantity;
-
+    private String name;
     // Additional fields
     private String productName;
     private double price;
@@ -23,7 +23,9 @@ public class ProductVariantModel {
         this.productName = productName;
         this.price = price;
     }
-
+    public String getName() {
+        return name;
+    }
     // Getters and Setters
     public int getVariantId() {
         return variantId;

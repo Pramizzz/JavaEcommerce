@@ -3,16 +3,19 @@ package controller;
 import DAO.OrderDAO;
 import DAO.OrderItemDAO;
 import DAO.ProductVariantDAO;
+import DAO.CartDAO;
 import model.OrderModel;
 import model.OrderItemModel;
 import model.ProductVariantModel;
+import model.CartItem;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet("/CheckoutController")
 public class CheckoutController extends HttpServlet {
@@ -32,75 +35,90 @@ public class CheckoutController extends HttpServlet {
         }
 
         int customerId = (Integer) session.getAttribute("customerId");
-
         String address = request.getParameter("shippingAddress");
         String paymentMethod = request.getParameter("paymentMethod");
-        String variantIdStr = request.getParameter("variantId");
-        String quantityStr = request.getParameter("quantity");
 
         boolean hasError = false;
 
-        // Refill values
-        request.setAttribute("shippingAddress", address);
-        request.setAttribute("paymentMethod", paymentMethod);
-        request.setAttribute("quantity", quantityStr);
-        request.setAttribute("variantId", variantIdStr);
-
-        // Validate address
-        if (address == null || address.trim().isEmpty() || !address.matches("^[a-zA-Z\\s,]+$")) {
-            request.setAttribute("addressError", "Address must contain only letters, spaces, and commas.");
+        if (address == null || address.trim().isEmpty() || !address.matches("^[a-zA-Z0-9\\s,.-]+$")) {
+            request.setAttribute("addressError", "Shipping address is required and must be valid.");
             hasError = true;
         }
-        
         if (paymentMethod == null || paymentMethod.trim().isEmpty()) {
             request.setAttribute("paymentError", "Payment method is required.");
             hasError = true;
         }
 
-        int quantity = 0;
-        int variantId = 0;
-
-        try {
-            quantity = Integer.parseInt(quantityStr);
-            variantId = Integer.parseInt(variantIdStr);
-            if (quantity <= 0) {
-                request.setAttribute("quantityError", "Quantity must be greater than 0.");
-                hasError = true;
-            }
-        } catch (NumberFormatException e) {
-            request.setAttribute("quantityError", "Quantity must be a valid number.");
-            hasError = true;
-        }
-
         ProductVariantDAO variantDAO = new ProductVariantDAO();
-        ProductVariantModel variant;
-		try {
-			variant = variantDAO.getVariantById(variantId);
-		
-        request.setAttribute("variant", variant); // so JSP can redisplay it
-
-        if (variant == null) {
-            request.setAttribute("stockError", "Product not found.");
-            hasError = true;
-        } else if (variant.getStockQuantity() < quantity) {
-            request.setAttribute("stockError", "Insufficient stock available.");
-            hasError = true;
-        }
-
-        if (hasError) {
-            request.getRequestDispatcher("pages/customer/checkout.jsp").forward(request, response);
-            return;
-        }
+        List<OrderItemModel> orderItems = new ArrayList<>();
+        double totalAmount = 0;
 
         try {
-            double price = variant.getPrice();
-            double totalAmount = price * quantity;
+            // Check if it's a single product order
+            String[] variantIds = request.getParameterValues("variantId");
+            String[] quantities = request.getParameterValues("quantity");
 
-            Timestamp orderDate = new Timestamp(System.currentTimeMillis());
+            if (variantIds != null && quantities != null && variantIds.length == quantities.length) {
+                for (int i = 0; i < variantIds.length; i++) {
+                    int variantId = Integer.parseInt(variantIds[i]);
+                    int quantity = Integer.parseInt(quantities[i]);
 
+                    ProductVariantModel variant = variantDAO.getVariantById(variantId);
+
+                    if (variant == null || quantity <= 0 || quantity > variant.getStockQuantity()) {
+                        request.setAttribute("stockError", "Invalid quantity or out of stock for variant ID: " + variantId);
+                        hasError = true;
+                        continue;
+                    }
+
+                    totalAmount += variant.getPrice() * quantity;
+
+                    OrderItemModel item = new OrderItemModel();
+                    item.setVariantId(variantId);
+                    item.setQuantity(quantity);
+                    item.setPrice(variant.getPrice());
+                    orderItems.add(item);
+                }
+            }
+            // Otherwise, assume it's a cart order
+            else {
+                CartDAO cartDAO = new CartDAO();
+                List<CartItem> cartItems = cartDAO.getCartItemsByUserId(customerId);
+
+                if (cartItems == null || cartItems.isEmpty()) {
+                    request.setAttribute("stockError", "Your cart is empty.");
+                    request.getRequestDispatcher("pages/customer/checkout.jsp").forward(request, response);
+                    return;
+                }
+
+                for (CartItem item : cartItems) {
+                    ProductVariantModel variant = variantDAO.getVariantById(item.getVariantId());
+
+                    if (variant == null || item.getQuantity() <= 0 || item.getQuantity() > variant.getStockQuantity()) {
+                        request.setAttribute("stockError", "Invalid or unavailable stock for: " + item.getProductName());
+                        hasError = true;
+                        continue;
+                    }
+
+                    totalAmount += item.getPrice() * item.getQuantity();
+
+                    OrderItemModel orderItem = new OrderItemModel();
+                    orderItem.setVariantId(item.getVariantId());
+                    orderItem.setQuantity(item.getQuantity());
+                    orderItem.setPrice(item.getPrice());
+                    orderItems.add(orderItem);
+                }
+            }
+
+            if (hasError) {
+                request.getRequestDispatcher("pages/customer/checkout.jsp").forward(request, response);
+                return;
+            }
+
+            // Create Order
             OrderModel order = new OrderModel();
             order.setUserId(customerId);
-            order.setOrderDate(orderDate);
+            order.setOrderDate(new Timestamp(System.currentTimeMillis()));
             order.setShippingAddress(address);
             order.setStatus("Pending");
             order.setPaymentMethod(paymentMethod);
@@ -109,54 +127,31 @@ public class CheckoutController extends HttpServlet {
             OrderDAO orderDAO = new OrderDAO();
             int orderId = orderDAO.insertOrder(order);
 
-            if (orderId == 0) {
-                request.setAttribute("stockError", "Failed to place order.");
+            if (orderId <= 0) {
+                request.setAttribute("stockError", "Failed to create order.");
                 request.getRequestDispatcher("pages/customer/checkout.jsp").forward(request, response);
                 return;
             }
 
-            OrderItemModel item = new OrderItemModel();
-            item.setOrderId(orderId);
-            item.setVariantId(variantId);
-            item.setQuantity(quantity);
-            item.setPrice(price);
-
+            // Insert Order Items
             OrderItemDAO itemDAO = new OrderItemDAO();
-            boolean itemInserted = itemDAO.insertOrderItem(item);
-
-            if (!itemInserted) {
-                request.setAttribute("stockError", "Failed to add order items.");
-                request.getRequestDispatcher("pages/customer/checkout.jsp").forward(request, response);
-                return;
+            for (OrderItemModel item : orderItems) {
+                item.setOrderId(orderId);
+                itemDAO.insertOrderItem(item);
+                variantDAO.reduceStock(item.getVariantId(), item.getQuantity());
             }
 
-            boolean stockUpdated = variantDAO.reduceStock(variantId, quantity);
+            // Clear cart if it was a cart-based checkout
+            CartDAO cartDAO = new CartDAO();
+            cartDAO.clearCartByUserId(customerId);
 
-            if (stockUpdated) {
-            	 session.setAttribute("orderSuccessMessage", "Your order has been placed successfully!");
-                response.sendRedirect("pages/customer/orderSucess.jsp");
-            } else {
-                request.setAttribute("stockError", "Failed to update stock.");
-                request.getRequestDispatcher("pages/customer/checkout.jsp").forward(request, response);
-            }
-            System.out.println("Received variantId: " + variantId);
-            System.out.println("Received quantity: " + quantityStr);
-            System.out.println("Received shippingAddress: " + address);
-            System.out.println("Received paymentMethod: " + paymentMethod);
-
+            session.setAttribute("orderSuccessMessage", "Your order has been placed successfully!");
+            response.sendRedirect("pages/customer/orderSucess.jsp");
 
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("stockError", "Checkout failed: " + e.getMessage());
             request.getRequestDispatcher("pages/customer/checkout.jsp").forward(request, response);
         }
-    }
-		 catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
     }
 }

@@ -5,12 +5,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class DashboardDAO {
-	    private Connection conn;
+import database.DatabaseConnection;
 
-	    public DashboardDAO(Connection conn) {
-	        this.conn = conn;
-	    }
+public class DashboardDAO {
+	private Connection conn;
+
+    public DashboardDAO() {
+        try {
+            this.conn = DatabaseConnection.getConnection(); 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 	    public int getTotalOrders() throws SQLException {
 	        String sql = "SELECT COUNT(*) FROM orders";
@@ -80,8 +86,8 @@ public class DashboardDAO {
 	    public String getMostBoughtProduct() throws SQLException {
 	        String sql = "SELECT p.product_name " +
 	                     "FROM order_items oi " +
-	                     "JOIN product_variants pv ON oi.variant_id = pv.variant_id " +
-	                     "JOIN products p ON pv.product_id = p.product_id " +
+	                     "JOIN product_variant pv ON oi.variant_id = pv.variant_id " +
+	                     "JOIN product p ON pv.product_id = p.product_id " +
 	                     "GROUP BY p.product_name " +
 	                     "ORDER BY SUM(oi.quantity) DESC " +
 	                     "LIMIT 1";
@@ -92,4 +98,86 @@ public class DashboardDAO {
 	        }
 	    }
 
+	    public int getTotalBrands() throws SQLException {
+	        String sql = "SELECT COUNT(*) FROM brand";
+	        try (PreparedStatement ps = conn.prepareStatement(sql);
+	             ResultSet rs = ps.executeQuery()) {
+	            return rs.next() ? rs.getInt(1) : 0;
+	        }
+	    }
+
+	    public int getTotalCategories() throws SQLException {
+	        String sql = "SELECT COUNT(*) FROM category";
+	        try (PreparedStatement ps = conn.prepareStatement(sql);
+	             ResultSet rs = ps.executeQuery()) {
+	            return rs.next() ? rs.getInt(1) : 0;
+	        }
+	    }
+	    public int getTotalProducts() throws SQLException {
+	        String sql = "SELECT COUNT(*) FROM product";
+	        try (PreparedStatement ps = conn.prepareStatement(sql);
+	             ResultSet rs = ps.executeQuery()) {
+	            return rs.next() ? rs.getInt(1) : 0;
+	        }
+	    }
+	    public String getTopSellingCategoryByQuantity() throws SQLException {
+	        String sql = "SELECT c.category_name " +
+	                     "FROM order_items oi " +
+	                     "JOIN product_variant pv ON oi.variant_id = pv.variant_id " +
+	                     "JOIN product p ON pv.product_id = p.product_id " +
+	                     "JOIN category c ON p.category_id = c.category_id " +
+	                     "GROUP BY c.category_name " +
+	                     "ORDER BY SUM(oi.quantity) DESC " +
+	                     "LIMIT 1";
+	        try (PreparedStatement ps = conn.prepareStatement(sql);
+	             ResultSet rs = ps.executeQuery()) {
+	            return rs.next() ? rs.getString(1) : "N/A";
+	        }
+	    }
+	    
+	    public String getTopSellingCategoryByRevenue() throws SQLException {
+	        String sql = "SELECT c.category_name " +
+	                     "FROM order_items oi " +
+	                     "JOIN product_variant pv ON oi.variant_id = pv.variant_id " +
+	                     "JOIN product p ON pv.product_id = p.product_id " +
+	                     "JOIN category c ON p.category_id = c.category_id " +
+	                     "GROUP BY c.category_name " +
+	                     "ORDER BY SUM(oi.quantity * oi.price) DESC " +
+	                     "LIMIT 1";
+	        try (PreparedStatement ps = conn.prepareStatement(sql);
+	             ResultSet rs = ps.executeQuery()) {
+	            return rs.next() ? rs.getString(1) : "N/A";
+	        }
+	    }
+
+	    public String getTopSellingBrandByQuantity() throws SQLException {
+	        String sql = "SELECT b.brand_name " +
+	                     "FROM order_items oi " +
+	                     "JOIN product_variant pv ON oi.variant_id = pv.variant_id " +
+	                     "JOIN product p ON pv.product_id = p.product_id " +
+	                     "JOIN brand b ON p.brand_id = b.brand_id " +
+	                     "GROUP BY b.brand_name " +
+	                     "ORDER BY SUM(oi.quantity) DESC " +
+	                     "LIMIT 1";
+	        try (PreparedStatement ps = conn.prepareStatement(sql);
+	             ResultSet rs = ps.executeQuery()) {
+	            return rs.next() ? rs.getString(1) : "N/A";
+	        }
+	    }
+	    public String getTopSellingBrandByRevenue() throws SQLException {
+	        String sql = "SELECT b.brand_name " +
+	                     "FROM order_items oi " +
+	                     "JOIN product_variant pv ON oi.variant_id = pv.variant_id " +
+	                     "JOIN product p ON pv.product_id = p.product_id " +
+	                     "JOIN brand b ON p.brand_id = b.brand_id " +
+	                     "GROUP BY b.brand_name " +
+	                     "ORDER BY SUM(oi.quantity * oi.price) DESC " +
+	                     "LIMIT 1";
+	        try (PreparedStatement ps = conn.prepareStatement(sql);
+	             ResultSet rs = ps.executeQuery()) {
+	            return rs.next() ? rs.getString(1) : "N/A";
+	        }
+	    }
+
+	    
 	}

@@ -1,5 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ page import="java.util.*, DAO.AddProductDAO, model.DisplayProductmodel" %>
+<%
+    AddProductDAO dao = new AddProductDAO();
+    List<DisplayProductmodel> products = dao.getAllProducts();
+    request.setAttribute("products", products);
+%>    
 <!DOCTYPE html>
 <html lang="en">
 
@@ -44,58 +50,51 @@
                 </div>
             </section>
 
-            <!-- Featured Products -->
-            <section class="featured">
-                <h2 class="section-title">Featured Releases</h2>
-                <div class="products-grid">
-                    <div class="product-card" data-id="1">
-                        <div class="product-image">
-                            <img src="${pageContext.request.contextPath}/images/Air_Jordan_1_Retro-removebg-preview.png" alt="Air Jordan 1 Mid" />
-                        </div>
-                        <div class="product-info">
-                            <h3>Air Jordan 1 Mid</h3>
-                            <p class="price">$125.00</p>
-                            <button class="add-to-cart">Add to Cart</button>
-                        </div>
+         <!-- Featured Products -->
+<section class="featured">
+    <h2 class="section-title">Featured Releases</h2>
+    <div class="products-grid">
+        <%
+        if (products != null && !products.isEmpty()) {
+            int count = 0;
+            for (DisplayProductmodel p : products) {
+                if (count >= 4) break; // Limit to 4 featured products
+        %>
+                <div class="product-card" data-id="<%=p.getProductId()%>">
+                    <div class="product-image">
+                        <img src="<%=request.getContextPath()%>/<%=p.getImagePaths().get(0)%>" 
+                             alt="<%=p.getProductName()%>" />
                     </div>
-
-                    <div class="product-card" data-id="2">
-                        <div class="product-image">
-                            <img src="${pageContext.request.contextPath}/images/Air_Jordan_1_Retro_High_OG-removebg-preview.png" alt="Air Jordan 1 Mid"
-                                alt="Air Jordan 4 Retro" />
-                        </div>
-                        <div class="product-info">
-                            <h3>Air Jordan 4 Retro</h3>
-                            <p class="price">$210.00</p>
-                            <button class="add-to-cart">Add to Cart</button>
-                        </div>
-                    </div>
-
-                    <div class="product-card" data-id="3">
-                        <div class="product-image">
-                            <img src="${pageContext.request.contextPath}/images/Air_Jordan_3_Retro-removebg-preview.png"
-                                alt="" />
-                        </div>
-                        <div class="product-info">
-                            <h3>Air Jordan 11 Retro</h3>
-                            <p class="price">$225.00</p>
-                            <button class="add-to-cart">Add to Cart</button>
-                        </div>
-                    </div>
-
-                    <div class="product-card" data-id="4">
-                        <div class="product-image">
-                            <img src="${pageContext.request.contextPath}/images/Air_Jordan_4_Retro-removebg-preview.png"
-                                alt="" />
-                        </div>
-                        <div class="product-info">
-                            <h3>Zion 2</h3>
-                            <p class="price">$140.00</p>
-                            <button class="add-to-cart">Add to Cart</button>
-                        </div>
+                    <div class="product-info">
+                        <h3><%=p.getProductName()%></h3>
+                        <p class="price">₹<%=p.getPrice()%></p>
+                        <% if (p.getVariantStock() > 0) { %>
+                            <p class="stock">In Stock (<%=p.getVariantStock()%> available)</p>
+                            <p class="size">Size: <%=p.getVariantSize()%></p>
+                            <button class="add-to-cart" data-product-id="<%=p.getProductId()%>">
+                                Add to Cart
+                            </button>
+                        <% } else { %>
+                            <p class="stock out-of-stock">Out of Stock</p>
+                            <button class="add-to-cart" disabled>
+                                Out of Stock
+                            </button>
+                        <% } %>
                     </div>
                 </div>
-            </section>
+        <%
+                count++;
+            }
+        } else {
+        %>
+            <div class="no-products">
+                <p>No featured products available at the moment.</p>
+            </div>
+        <%
+        }
+        %>
+    </div>
+</section>
 
             <!-- New Arrivals -->
             <!-- Slider -->

@@ -11,6 +11,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Category</title>
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/admincss/category.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/css/admincss/admindashbord.css">
     <style>
         /* [Same styles as before] */
@@ -79,9 +80,7 @@
     </style>
 </head>
 <body>
- 
 <%@ include file="sidebar.jsp" %>
-
 <div class="header">
     <h1>Add New Category</h1>
 </div>
@@ -159,19 +158,29 @@
 
 
 </div>
+<!-- Logout Confirmation Modal -->
+<div id="logoutModal">
+    <div class="modal-content">
+        <p>Are you sure you want to logout?</p>
+        <button id="yesBtn" onclick="confirmLogout()">Yes</button>
+        <button id="noBtn" onclick="hideLogoutModal()">No</button>
+    </div>
+</div>
 
-<!-- Logout modal script -->
 <script>
-    function showLogoutModal() {
-        document.getElementById("logoutModal").style.display = "block";
-    }
-    function hideLogoutModal() {
-        document.getElementById("logoutModal").style.display = "none";
-    }
-    function confirmLogout() {
-        window.location.href = '../home.jsp';
-    }
+function showLogoutModal() {
+    document.getElementById("logoutModal").style.display = "block";
+}
+
+function hideLogoutModal() {
+    document.getElementById("logoutModal").style.display = "none";
+}
+
+function confirmLogout() {
+	window.location.href = '<%= request.getContextPath() %>/LogoutServlet';
+}
 </script>
+
 
 </body>
 </html>

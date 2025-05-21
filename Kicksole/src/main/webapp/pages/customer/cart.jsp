@@ -139,7 +139,25 @@ if (session.getAttribute("userId") == null) {
             e.printStackTrace();
         }
     }
-%>
+%><div style="display: flex; justify-content: center; margin-bottom: 20px;">
+    <form action="${pageContext.request.contextPath}/pages/customer/product.jsp" method="get">
+        <button type="submit" style="
+        margin-top:10px;
+            background-color: #333;
+            color: white;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        "
+        onmouseover="this.style.transform='scale(1.05)'; this.style.backgroundColor='#555';"
+        onmouseout="this.style.transform='scale(1)'; this.style.backgroundColor='#333';"
+        >← Back to Products</button>
+    </form>
+</div>
+
 
 <div class="cart-container">
     <h2 class="cart-title">Your Cart</h2>
@@ -179,9 +197,11 @@ if (session.getAttribute("userId") == null) {
             <form action="${pageContext.request.contextPath}/ClearCartServlet" method="post">
                 <button type="submit">Clear Cart</button>
             </form>
-            <form action="${pageContext.request.contextPath}/pages/customer/checkout.jsp" method="post">
-                <button type="submit">Proceed to Checkout</button>
-            </form>
+           <form action="${pageContext.request.contextPath}/pages/customer/checkout.jsp" method="get">
+    <button type="submit">Proceed to Checkout</button>
+</form>
+
+
         </div>
     <%
     } else {

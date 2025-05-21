@@ -10,6 +10,7 @@
     <meta charset="UTF-8">
     <title>Add Brand</title>
     <link rel="stylesheet" href="<%=request.getContextPath()%>/css/admincss/admindashbord.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/admincss/brand.css">
     <style>
         body {
             margin: 0;

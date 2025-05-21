@@ -10,55 +10,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin Settings</title>
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/admincss/Settingcss.css">
+  
     <style>
-       /* General Styles */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-}
-
-/* Sidebar Styles */
-.sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 220px;
-    height: 100%;
-    background-color: #343a40;
-    padding: 20px;
-    box-sizing: border-box;
-    color: white;
-    font-weight: bold;
-    overflow-y: auto;
-}
-
-.sidebar h2 {
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 24px;
-    border-bottom: 1px solid #495057;
-    padding-bottom: 10px;
-}
-
-.sidebar a {
-    display: block;
-    padding: 12px 15px;
-    color: white;
-    text-decoration: none;
-    margin-bottom: 8px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-.sidebar a:hover {
-    background-color: #007BFF;
-    color: white;
-}
-
-/* Main Content Styles */
+     
 .main-content {
     margin-left: 220px;
     padding: 50px;
@@ -213,98 +167,7 @@ body {
 
 .form-section .cancel-btn:hover {
     background-color: #c82333;
-}
-
-/* Logout Modal */
-#logoutModal {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5);
-    z-index: 1000;
-}
-
-#logoutModal > div {
-    background: white;
-    width: 300px;
-    margin: 100px auto;
-    padding: 20px;
-    border-radius: 8px;
-    text-align: center;
-}
-
-#logoutModal button {
-    padding: 8px 16px;
-    font-size: 16px;
-    cursor: pointer;
-    border: none;
-    border-radius: 6px;
-    margin: 0 10px;
-    user-select: none;
-}
-
-#logoutModal button:first-child {
-    background-color: #dc3545;
-    color: white;
-}
-
-#logoutModal button:first-child:hover {
-    background-color: #c82333;
-}
-
-#logoutModal button:last-child {
-    background-color: #6c757d;
-    color: white;
-}
-
-#logoutModal button:last-child:hover {
-    background-color: #5a6268;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .sidebar {
-        width: 180px;
-    }
-    .main-content {
-        margin-left: 180px;
-        padding: 30px 20px;
-    }
-    .settings-container {
-        padding: 30px 20px;
-    }
-    .profile-image {
-        width: 140px;
-        height: 140px;
-    }
-}
-
-@media (max-width: 480px) {
-    .sidebar {
-        position: relative;
-        width: 100%;
-        height: auto;
-        padding: 10px 0;
-    }
-    .sidebar a {
-        display: inline-block;
-        margin: 5px 10px;
-    }
-    .main-content {
-        margin-left: 0;
-        padding: 20px 10px;
-    }
-    .settings-container {
-        padding: 20px 10px;
-    }
-    .profile-image {
-        width: 120px;
-        height: 120px;
-    }
-}
-       
-       
+} 
     </style>
 </head>
 <body>
@@ -383,40 +246,6 @@ body {
     </div>
 </div>
 
-<!-- Logout Modal -->
-<div id="logoutModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000;">
-    <div style="background:white; width:300px; margin:100px auto; padding:20px; border-radius:8px; text-align:center;">
-        <p>Are you sure you want to logout?</p>
-        <button onclick="confirmLogout()" style="margin-right:10px; padding:8px 16px;">Yes</button>
-        <button onclick="hideLogoutModal()" style="padding:8px 16px;">No</button>
-    </div>
-</div>
-
-<script>
-    function showLogoutModal() {
-        document.getElementById("logoutModal").style.display = "block";
-    }
-
-    function hideLogoutModal() {
-        document.getElementById("logoutModal").style.display = "none";
-    }
-
-    function confirmLogout() {
-        window.location.href = '<%= request.getContextPath() %>/LogoutServlet';
-    }
-
-    function toggleSection(id) {
-        const section = document.getElementById(id);
-        if(section.style.display === "block") {
-            section.style.display = "none";
-        } else {
-            // Hide both first
-            document.getElementById('editProfile').style.display = 'none';
-            document.getElementById('changePassword').style.display = 'none';
-            section.style.display = "block";
-        }
-    }
-</script>
 
 </body>
 </html>

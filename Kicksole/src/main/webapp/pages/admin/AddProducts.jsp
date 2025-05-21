@@ -15,6 +15,9 @@
 <head>
 <link rel="stylesheet"
 	href="<%=request.getContextPath()%>/css/admincss/adminproduct.css">
+	<link rel="stylesheet"
+	href="<%=request.getContextPath()%>/css/admincss/product.css">
+	
 <meta charset="UTF-8">
 <title>Products Management</title>
 <style>

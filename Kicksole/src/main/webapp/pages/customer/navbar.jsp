@@ -14,6 +14,7 @@
     username = (String) session.getAttribute("username");
     user = (Userc) session.getAttribute("user");
 %>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     
 <header>
     <div class="logo">
@@ -37,8 +38,12 @@
                 <a href="<%= request.getContextPath() %>/pages/customer/about.jsp">About Us</a>
             </li>
             <li class="<%= currentPage.endsWith("cart.jsp") ? "active" : "" %>">
-                <a href="<%= request.getContextPath() %>/pages/customer/cart.jsp">cart</a>
-            </li>
+    <a href="<%= request.getContextPath() %>/pages/customer/cart.jsp">
+        <i class='bx bx-cart'></i> Cart
+    </a>
+</li>
+
+
             <li class="<%= currentPage.endsWith("contact.jsp") ? "active" : "" %>">
                 <a href="<%= request.getContextPath() %>/pages/customer/contact.jsp">Contact</a>
             </li>
@@ -82,6 +87,26 @@
         </ul>
     </nav>
     <style>
+    nav ul li.active a {
+    color: #fff;              /* White text */
+    background-color: #333;   /* Dark background */
+    border-radius: 140px;
+    padding: 8px 12px;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #aaa;              /* Light gray text by default */
+    padding: 8px 12px;
+    transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: #fff;
+}
+    
     .user-dropdown {
         position: relative;
         display: inline-block;
