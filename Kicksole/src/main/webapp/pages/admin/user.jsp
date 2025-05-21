@@ -91,10 +91,9 @@
 </head>
 
 <body>
-
 <div class="sidebar">
     <h2>Admin Panel</h2>
-    <a href="../customer/home.jsp">HomePage</a>
+   <a href="../customer/home.jsp">HomePage</a>
     <a href="<%= request.getContextPath() %>/pages/admin/adminDashboard.jsp">Dashboard</a>
     <a href="<%= request.getContextPath() %>/pages/admin/category.jsp">Add Category</a>
     <a href="../admin/AddBrand.jsp"> Add Brand</a>

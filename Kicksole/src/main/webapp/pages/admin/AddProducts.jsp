@@ -97,21 +97,19 @@ if (!message.isEmpty()) {
 %>
 
 
-
-	<div class="sidebar">
-		<h2>Admin Panel</h2>
-		<a href="../admin/adminDashbord.jsp">Dashboard</a> <a
-			href="../admin/category.jsp">Add Category</a> <a
-			href="../admin/products.jsp">Products</a> <a href="../admin/user.jsp">Manage
-			Users</a> <a href="../admin/order.jsp">Orders</a> <a
-			href="../admin/report.jsp">Reports</a> <a href="../admin/setting.jsp">Settings</a>
-		<a href="../home.jsp">Logout</a>
-	</div>
-
-	<div class="header">
-		<h1>Product Management</h1>
-	</div>
-
+<div class="sidebar">
+    <h2>Admin Panel</h2>
+   <a href="../customer/home.jsp">HomePage</a>
+    <a href="<%= request.getContextPath() %>/pages/admin/adminDashboard.jsp">Dashboard</a>
+    <a href="<%= request.getContextPath() %>/pages/admin/category.jsp">Add Category</a>
+    <a href="../admin/AddBrand.jsp"> Add Brand</a>
+    <a href="<%= request.getContextPath() %>/pages/admin/AddProducts.jsp">Products</a>
+    <a href="<%= request.getContextPath() %>/pages/admin/user.jsp">Manage Users</a>
+    <a href="<%= request.getContextPath() %>/pages/admin/order.jsp">Orders</a>
+    <a href="<%= request.getContextPath() %>/pages/admin/report.jsp">Reports</a>
+    <a href="<%= request.getContextPath() %>/pages/admin/setting.jsp">Settings</a>
+    <a href="#" onclick="showLogoutModal()">Logout</a>
+</div>
 	<%
 	List<AddBrandModel> brands = null;
 	List<AddCategory> categories = null;

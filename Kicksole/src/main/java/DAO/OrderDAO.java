@@ -16,13 +16,12 @@ public class OrderDAO {
             pstmt.setInt(1, order.getUserId());
 
             if (order.getOrderDate() != null) {
-                pstmt.setTimestamp(2, order.getOrderDate());   // use setTimestamp for Timestamp
+                pstmt.setTimestamp(2, order.getOrderDate());   
             } else {
-                pstmt.setTimestamp(2, new Timestamp(System.currentTimeMillis()));  // current timestamp
+                pstmt.setTimestamp(2, new Timestamp(System.currentTimeMillis())); 
             }
 
             pstmt.setString(3, order.getShippingAddress());
-
             if (order.getStatus() != null) {
                 pstmt.setString(4, order.getStatus());
             } else {
@@ -41,6 +40,7 @@ public class OrderDAO {
             try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     generatedOrderId = generatedKeys.getInt(1);
+                    System.out.println("Inserted order with ID: " + generatedOrderId);
                 } else {
                     throw new SQLException("Inserting order failed, no ID obtained.");
                 }

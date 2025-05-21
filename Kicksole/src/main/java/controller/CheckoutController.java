@@ -139,6 +139,11 @@ public class CheckoutController extends HttpServlet {
                 request.setAttribute("stockError", "Failed to update stock.");
                 request.getRequestDispatcher("pages/customer/checkout.jsp").forward(request, response);
             }
+            System.out.println("Received variantId: " + variantId);
+            System.out.println("Received quantity: " + quantityStr);
+            System.out.println("Received shippingAddress: " + address);
+            System.out.println("Received paymentMethod: " + paymentMethod);
+
 
         } catch (Exception e) {
             e.printStackTrace();

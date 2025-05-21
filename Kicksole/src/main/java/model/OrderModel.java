@@ -5,11 +5,12 @@ import java.sql.Timestamp;
 public class OrderModel {
     private int orderId;
     private int userId;
-    private Timestamp orderDate;  // change here
+    private Timestamp orderDate;  
     private String shippingAddress;
     private String status;
     private String paymentMethod;
     private double totalAmount;
+    
 
     public OrderModel() {
     }
@@ -26,10 +27,10 @@ public class OrderModel {
     public void setUserId(int userId) {
         this.userId = userId;
     }
-    public Timestamp getOrderDate() {  // change here
+    public Timestamp getOrderDate() {  
         return orderDate;
     }
-    public void setOrderDate(Timestamp orderDate) {  // change here
+    public void setOrderDate(Timestamp orderDate) {  
         this.orderDate = orderDate;
     }
     public String getShippingAddress() {
@@ -56,4 +57,6 @@ public class OrderModel {
     public void setTotalAmount(double totalAmount) {
         this.totalAmount = totalAmount;
     }
+    
+  
 }

@@ -64,33 +64,14 @@ public class LoginServlet extends HttpServlet {
                 HttpSession session = request.getSession();
                 session.setAttribute("username", username);
                 session.setAttribute("role", role);
-                
-                int userId = loginDAO.getUserIdByUsername(username); // <-- You need to implement this method
+
+                int userId = loginDAO.getUserIdByUsername(username);
                 session.setAttribute("customerId", userId);
 
-                if (role != null) {
-                    HttpSession session3 = request.getSession();
-                    session.setAttribute("username", username);
-                    session.setAttribute("role", role);
-
-                    int userId1 = loginDAO.getUserIdByUsername(username);
-                    session.setAttribute("customerId", userId1);
-
-                    // ✅ Add admin object in session if role is admin
-                    if ("admin".equalsIgnoreCase(role)) {
-                        session.setMaxInactiveInterval(15 * 60); 
-
-                        User admin = loginDAO.getUserByUsername(username); // <-- Get admin details
-                        session.setAttribute("admin", admin);              // <-- Store in session
-                    } else {
-                        session.setMaxInactiveInterval(60 * 60); 
-                    }
-
-                    // (rest of your existing code continues below unchanged...)
-
-                
                 if ("admin".equalsIgnoreCase(role)) {
                     session.setMaxInactiveInterval(15 * 60); 
+                    User admin = loginDAO.getUserByUsername(username);
+                    session.setAttribute("admin", admin);
                 } else {
                     session.setMaxInactiveInterval(60 * 60); 
                 }
@@ -107,7 +88,7 @@ public class LoginServlet extends HttpServlet {
                     userCookie.setPath(request.getContextPath());
                     response.addCookie(userCookie);
                 }
-                
+
                 String redirectURL = (String) session.getAttribute("redirectAfterLogin");
                 if (redirectURL != null) {
                     session.removeAttribute("redirectAfterLogin");
@@ -122,6 +103,7 @@ public class LoginServlet extends HttpServlet {
                 }
 
             } else {
+                // ❗ This code is now properly inside the try block
                 if (!loginDAO.doesUsernameExist(username)) {
                     request.setAttribute("status", "wrongUsername");
                 } else {
@@ -132,13 +114,11 @@ public class LoginServlet extends HttpServlet {
                 dispatcher.forward(request, response);
             }
 
-            }}
-        catch (ClassNotFoundException | SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
             request.setAttribute("status", "dbError");
             RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/customer/login.jsp");
             dispatcher.forward(request, response);
         }
-        
     }
 }
