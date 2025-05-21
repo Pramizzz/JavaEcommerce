@@ -240,7 +240,7 @@
                <a href="<%= request.getContextPath() %>/pages/customer/Profile_Edit.jsp" class="profile-btn">
                     <i class='bx bx-edit'></i> Edit Profile
                 </a>
-                <a href="${pageContext.request.contextPath}/ChangePasswordServlet" class="profile-btn">
+                <a href="<%= request.getContextPath() %>/pages/customer/change-password.jsp" class="profile-btn">
                     <i class='bx bx-lock-alt'></i> Change Password
                 </a>
             </div>

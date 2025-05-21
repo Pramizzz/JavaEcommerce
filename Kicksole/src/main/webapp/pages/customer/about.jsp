@@ -10,7 +10,24 @@
     <meta name="description" content="Learn about Shadow Sneaks Jordan Collection" />
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/pagescss/style.css">
-    <script src="<%= request.getContextPath() %>/resources/javascript/script.js"></script>
+    <script src="<%= request.getContextPath() %>/javascript/script.js"></script>
+    <style>
+    .about-hero {
+	 background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+	   url("<%= request.getContextPath() %>/images/About_Banner.png");
+		background-size: cover;
+		  background-position: center;
+		  background-repeat: no-repeat;
+		  height: 70vh;
+		  display: flex;
+		  align-items: center;
+		  justify-content: center;
+		  text-align: center;
+		  padding: 0 1rem;
+	}
+
+    
+    </style>
 </head>
 
 <body>
@@ -28,7 +45,7 @@
             <section class="about-section">
                 <div class="about-container">
                     <div class="about-image">
-                        <img src="${pageContext.request.contextPath}/resources/images/Group-Photo.png" alt="Group Photo">
+                        <img src="${pageContext.request.contextPath}/images/The Gang.jpg" alt="Group Photo">
                     </div>
                     <div class="about-text">
                         <h3>The Shadow Sneaks Journey</h3>
@@ -76,7 +93,7 @@
                 <div class="team-container">
                     <div class="team-member">
                         <div class="member-image">
-                            <img src="${pageContext.request.contextPath}/resources/images/Pramit.png" alt="Team Member" />
+                            <img src="${pageContext.request.contextPath}/images/Pramit.png" alt="Team Member" />
                         </div>
                         <h3>Pramit Gurung</h3>
                         <p>Database Design </p>
@@ -84,7 +101,7 @@
                     </div>
                     <div class="team-member">
                         <div class="member-image">
-                            <img src="${pageContext.request.contextPath}/resources/images/Reshal.png" alt="Team Member" />
+                            <img src="${pageContext.request.contextPath}/images/Reshal.png" alt="Team Member" />
                         </div>
                         <h3>Reshal Shrestha</h3>
                         <p>Designer</p>
@@ -92,7 +109,7 @@
                     </div>
                     <div class="team-member">
                         <div class="member-image">
-                            <img src="${pageContext.request.contextPath}/resources/images/Aditya.png" alt="Team Member" />
+                            <img src="${pageContext.request.contextPath}/images/Aditya.png" alt="Team Member" />
                         </div>
                         <h3>Aditya Karki</h3>
                         <p>Frontend Developer </p>
@@ -100,7 +117,7 @@
                     </div>
                     <div class="team-member">
                         <div class="member-image">
-                            <img src="${pageContext.request.contextPath}/resources/images/Abin.png" alt="Team Member" />
+                            <img src="${pageContext.request.contextPath}/images/Abin.png" alt="Team Member" />
                     </div>
                         <h3>Abin Udash</h3>
                         <p>Admin Content</p>
@@ -108,7 +125,7 @@
                     </div>
                     <div class="team-member">
                         <div class="member-image">
-                            <img src="${pageContext.request.contextPath}/resources/images/Susmarika.png" alt="Team Member" />
+                            <img src="${pageContext.request.contextPath}/images/Susmarika.png" alt="Team Member" />
                         </div>
                         <h3>Susmarika Koirala</h3>
                         <p>Login Panel</p>

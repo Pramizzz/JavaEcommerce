@@ -10,9 +10,24 @@
     <meta name="description" content="Premium Jordan sneakers collection" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/pagescss/style.css">
       <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <script src="<%= request.getContextPath() %>/resources/javascript/script.js"></script>
+    <script src="<%= request.getContextPath() %>/javascript/script.js"></script>
     <!-- Link Swiper's CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <style>
+		.hero {
+		  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+		    url("<%= request.getContextPath() %>/images/Home_Banner.jpg");
+		  background-size: cover;
+		  background-position: center;
+		  background-repeat: no-repeat;
+		  height: 70vh;
+		  display: flex;
+		  align-items: center;
+		  justify-content: center;
+		  text-align: center;
+		  padding: 0 1rem;
+		}
+</style>
 </head>
 
 <body>
@@ -35,8 +50,7 @@
                 <div class="products-grid">
                     <div class="product-card" data-id="1">
                         <div class="product-image">
-                            <img src="https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/fd43a343-1651-4965-99df-68ca5c3a29f1/air-jordan-1-mid-shoes-SQf7DM.png"
-                                alt="Air Jordan 1 Mid" />
+                            <img src="${pageContext.request.contextPath}/images/Air_Jordan_1_Retro-removebg-preview.png" alt="Air Jordan 1 Mid" />
                         </div>
                         <div class="product-info">
                             <h3>Air Jordan 1 Mid</h3>
@@ -47,7 +61,7 @@
 
                     <div class="product-card" data-id="2">
                         <div class="product-image">
-                            <img src="https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/33533fe2-1157-4001-896e-1803c60f0ea8/air-jordan-4-retro-shoes-DbgkPK.png"
+                            <img src="${pageContext.request.contextPath}/images/Air_Jordan_1_Retro_High_OG-removebg-preview.png" alt="Air Jordan 1 Mid"
                                 alt="Air Jordan 4 Retro" />
                         </div>
                         <div class="product-info">
@@ -59,8 +73,8 @@
 
                     <div class="product-card" data-id="3">
                         <div class="product-image">
-                            <img src="https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/6d1f8d21-6f3f-418f-ae0e-d25da8364dc8/air-jordan-11-retro-shoes-TnZ9vy.png"
-                                alt="Air Jordan 11 Retro" />
+                            <img src="${pageContext.request.contextPath}/images/Air_Jordan_3_Retro-removebg-preview.png"
+                                alt="" />
                         </div>
                         <div class="product-info">
                             <h3>Air Jordan 11 Retro</h3>
@@ -71,8 +85,8 @@
 
                     <div class="product-card" data-id="4">
                         <div class="product-image">
-                            <img src="https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/e0479d12-3b22-4744-9489-5f4722196080/zion-2-basketball-shoes-bZ2Snk.png"
-                                alt="Zion 2" />
+                            <img src="${pageContext.request.contextPath}/images/Air_Jordan_4_Retro-removebg-preview.png"
+                                alt="" />
                         </div>
                         <div class="product-info">
                             <h3>Zion 2</h3>
@@ -86,53 +100,53 @@
             <!-- New Arrivals -->
             <!-- Slider -->
 
-            <section class="collection">
+           <section class="collection">
                 <div class="swiper mySwiper">
                     <div class="swiper-wrapper">
                         <div class="content swiper-slide">
-                            <img src="${pageContext.request.contextPath}/resources/images/slider_image1.jpg" alt="">
+                            <img src="${pageContext.request.contextPath}/images/slider_image1.jpg" alt="">
                             <div class="text-content">
-                                <h3>Photography</h3>
+                                <h3>Nike Jordan 3 Retro</h3>
                                 <p>Lorem ipsum dolor sit amet </p>
                                 <button class="btn">Read More</button>
                             </div>
                         </div>
                         <div class="content swiper-slide">
-                            <img src="${pageContext.request.contextPath}/resources/images/slider_image2.jpg" alt="">
+                            <img src="${pageContext.request.contextPath}/images/slider_image2.jpg" alt="">
                             <div class="text-content">
-                                <h3>Photography</h3>
+                                <h3>Nike Jordan MVP Trainers</h3>
                                 <p>Lorem ipsum dolor sit amet </p>
                                 <button class="btn">Read More</button>
                             </div>
                         </div>
                         <div class="content swiper-slide">
-                            <img src="${pageContext.request.contextPath}/resources/images/slider_image3.jpg" alt="">
+                            <img src="${pageContext.request.contextPath}/images/slider_image3.jpg" alt="">
                             <div class="text-content">
-                                <h3>Photography</h3>
+                                <h3>Nike Jordan 5 Oreo</h3>
                                 <p>Lorem ipsum dolor sit amet </p>
                                 <button class="btn">Read More</button>
                             </div>
                         </div>
                         <div class="content swiper-slide">
-                            <img src="${pageContext.request.contextPath}/resources/images/slider_image1.jpg" alt="">
+                            <img src="${pageContext.request.contextPath}/images/slider_image4.jpg" alt="">
                             <div class="text-content">
-                                <h3>Photography</h3>
+                                <h3>Nike Jordan Luka 2</h3>
                                 <p>Lorem ipsum dolor sit amet </p>
                                 <button class="btn">Read More</button>
                             </div>
                         </div>
                         <div class="content swiper-slide">
-                            <img src="${pageContext.request.contextPath}/resources/images/slider_image2.jpg" alt="">
+                            <img src="${pageContext.request.contextPath}/images/slider_image5.jpg" alt="">
                             <div class="text-content">
-                                <h3>Photography</h3>
+                                <h3>Nike Jorddan Air Ubempo</h3>
                                 <p>Lorem ipsum dolor sit amet </p>
                                 <button class="btn">Read More</button>
                             </div>
                         </div>
                         <div class="content swiper-slide">
-                            <img src="${pageContext.request.contextPath}/resources/images/slider_image3.jpg" alt="">
+                            <img src="${pageContext.request.contextPath}/images/slider_image6.jpg" alt="">
                             <div class="text-content">
-                                <h3>Photography</h3>
+                                <h3>Nike Jordan 5 oreo</h3>
                                 <p>Lorem ipsum dolor sit amet </p>
                                 <button class="btn">Read More</button>
                             </div>

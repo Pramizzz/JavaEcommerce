@@ -91,20 +91,7 @@
 </head>
 
 <body>
-<div class="sidebar">
-    <h2>Admin Panel</h2>
-   <a href="../customer/home.jsp">HomePage</a>
-    <a href="<%= request.getContextPath() %>/pages/admin/adminDashboard.jsp">Dashboard</a>
-    <a href="<%= request.getContextPath() %>/pages/admin/category.jsp">Add Category</a>
-    <a href="../admin/AddBrand.jsp"> Add Brand</a>
-    <a href="<%= request.getContextPath() %>/pages/admin/AddProducts.jsp">Products</a>
-    <a href="<%= request.getContextPath() %>/pages/admin/user.jsp">Manage Users</a>
-    <a href="<%= request.getContextPath() %>/pages/admin/order.jsp">Orders</a>
-    <a href="<%= request.getContextPath() %>/pages/admin/report.jsp">Reports</a>
-    <a href="<%= request.getContextPath() %>/pages/admin/setting.jsp">Settings</a>
-    <a href="#" onclick="showLogoutModal()">Logout</a>
-</div>
-
+<%@ include file="sidebar.jsp" %>
 <div id="logoutModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000;">
     <div style="background:white; width:300px; margin:100px auto; padding:20px; border-radius:8px; text-align:center;">
         <p>Are you sure you want to logout?</p>

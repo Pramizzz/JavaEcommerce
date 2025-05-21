@@ -308,20 +308,8 @@ body {
     </style>
 </head>
 <body>
-<div class="sidebar">
-    <h2>Admin Panel</h2>
-   <a href="../customer/home.jsp">HomePage</a>
-    <a href="<%= request.getContextPath() %>/pages/admin/adminDashboard.jsp">Dashboard</a>
-    <a href="<%= request.getContextPath() %>/pages/admin/category.jsp">Add Category</a>
-    <a href="../admin/AddBrand.jsp"> Add Brand</a>
-    <a href="<%= request.getContextPath() %>/pages/admin/AddProducts.jsp">Products</a>
-    <a href="<%= request.getContextPath() %>/pages/admin/user.jsp">Manage Users</a>
-    <a href="<%= request.getContextPath() %>/pages/admin/order.jsp">Orders</a>
-    <a href="<%= request.getContextPath() %>/pages/admin/report.jsp">Reports</a>
-    <a href="<%= request.getContextPath() %>/pages/admin/setting.jsp">Settings</a>
-    <a href="#" onclick="showLogoutModal()">Logout</a>
-</div>
-
+ 
+<%@ include file="sidebar.jsp" %>
 <!-- Main Content -->
 <div class="main-content">
     <div class="settings-container">
@@ -350,9 +338,14 @@ body {
 
 
         <div class="button-group">
-            <button class="btn edit-btn" onclick="toggleSection('editProfile')">Edit Profile</button>
-            <button class="btn password-btn" onclick="toggleSection('changePassword')">Change Password</button>
-        </div>
+    <a href="<%= request.getContextPath() %>/pages/customer/Profile_Edit.jsp" class="btn edit-btn">
+        <i class='bx bx-edit'></i> Edit Profile
+    </a>
+    <a href="<%= request.getContextPath() %>/pages/customer/change-password.jsp" class="btn password-btn">
+        <i class='bx bx-lock-alt'></i> Change Password
+    </a>
+</div>
+
 
         <!-- Edit Profile Section -->
         <div class="form-section" id="editProfile" style="display:none;">
@@ -365,9 +358,6 @@ body {
 
                 <label for="phone">Phone</label>
                 <input type="text" name="phone" value="<%= admin != null ? admin.getPhone() : "" %>">
-
-                <label for="image">Change Profile Image</label>
-                <input type="file" name="image">
 
                 <button type="submit" class="btn">Save</button>
                 <button type="button" class="btn cancel-btn" onclick="toggleSection('editProfile')">Cancel</button>

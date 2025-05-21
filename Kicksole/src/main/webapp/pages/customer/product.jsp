@@ -29,6 +29,101 @@ try {
 	href="${pageContext.request.contextPath}/css/pagescss/style.css">
 <title>Insert title here</title>
 <style>
+/* Grid layout: 6 per row */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+/* Product Card */
+.product-card {
+    background-color: #1e1e1e;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.75);
+}
+
+/* Image */
+.product-image img {
+    width: 100%;
+    height: 200px;
+    object-fit: fill;
+   
+}
+
+/* Product Info */
+.product-info {
+    padding: 1rem;
+    color: #eaeaea;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.product-info h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+}
+
+.product-info p {
+    font-size: 0.95rem;
+    margin: 0.25rem 0;
+    color: #bbbbbb;
+}
+
+/* Quantity input */
+.product-actions input[type="number"] {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 6px;
+    background-color: #2d2d2d;
+    color: white;
+    border: 1px solid #444;
+    margin-bottom: 0.8rem;
+}
+
+/* Button Container */
+.product-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 1rem;
+}
+
+/* Buttons */
+.product-actions form {
+    flex: 1 1 100%;
+}
+
+.product-actions button {
+    width: 100%;
+    padding: 0.6rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: white;
+    background-color: #3f51b5; /* Same color for all buttons */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.product-actions button:hover {
+    background-color: #5c6bc0;
+}
+
+
     .error-box {
         background-color: #ffe6e6;
         border: 2px solid #cc0000;
@@ -175,13 +270,17 @@ if (selectedBrandId == null) {
                 <p>Size: <%=p.getVariantSize()%></p>
             </div>
             <div class="product-actions">
-                <!-- Add to Cart Button -->
+                  <!-- Add to Cart Button -->
                <form action="${pageContext.request.contextPath}/AddToCartServlet" method="post">
     <input type="hidden" name="variantId" value="<%= p.getVariantId() %>" />
     <input type="number" name="quantity" value="1" min="1" />
     <button type="submit">Add to Cart</button>
 </form>
-
+<!-- View Product Button -->
+<form action="<%= request.getContextPath() %>/pages/customer/ProductDescription.jsp" method="get" style="display:inline;">
+    <input type="hidden" name="variantId" value="<%= p.getVariantId() %>" />
+    <button type="submit" class="view-product-btn">View Product</button>
+</form>
 
 
                 <!-- Buy Now Button -->

@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="DAO.AddBrandDAO" %>
 <%@ page import="java.util.*" %>
@@ -84,19 +85,8 @@
     </style>
 </head>
 <body>
-<div class="sidebar">
-    <h2>Admin Panel</h2>
-   <a href="../customer/home.jsp">HomePage</a>
-    <a href="<%= request.getContextPath() %>/pages/admin/adminDashboard.jsp">Dashboard</a>
-    <a href="<%= request.getContextPath() %>/pages/admin/category.jsp">Add Category</a>
-    <a href="../admin/AddBrand.jsp"> Add Brand</a>
-    <a href="<%= request.getContextPath() %>/pages/admin/AddProducts.jsp">Products</a>
-    <a href="<%= request.getContextPath() %>/pages/admin/user.jsp">Manage Users</a>
-    <a href="<%= request.getContextPath() %>/pages/admin/order.jsp">Orders</a>
-    <a href="<%= request.getContextPath() %>/pages/admin/report.jsp">Reports</a>
-    <a href="<%= request.getContextPath() %>/pages/admin/setting.jsp">Settings</a>
-    <a href="#" onclick="showLogoutModal()">Logout</a>
-</div>
+ 
+<%@ include file="sidebar.jsp" %>
 
 <div class="header">
     <h1>Add New Brand</h1>

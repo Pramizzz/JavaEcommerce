@@ -12,6 +12,20 @@
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/pagescss/style.css">
     <script src="<%= request.getContextPath() %>/resources/javascript/script.js"></script>
+    <style>
+	.contact-hero {
+	  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+	    url("<%= request.getContextPath() %>/images/Collage-Banner.png");
+	  background-size: cover;
+	  background-position: center;
+	  height: 60vh;
+	  display: flex;
+	  align-items: center;
+	  justify-content: center;
+	  text-align: center;
+	}
+</style>
+    
 </head>
 
 <body>
