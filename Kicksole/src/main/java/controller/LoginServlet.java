@@ -2,7 +2,6 @@ package controller;
 
 import java.io.IOException;
 import model.User;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 
 import javax.servlet.*;
@@ -67,6 +66,7 @@ public class LoginServlet extends HttpServlet {
 
                 int userId = loginDAO.getUserIdByUsername(username);
                 session.setAttribute("customerId", userId);
+                session.setAttribute("userId", userId);   
 
                 if ("admin".equalsIgnoreCase(role)) {
                     session.setMaxInactiveInterval(15 * 60); 
@@ -89,12 +89,14 @@ public class LoginServlet extends HttpServlet {
                     response.addCookie(userCookie);
                 }
 
+                // ==== This is the added/fixed redirect after login logic ====
                 String redirectURL = (String) session.getAttribute("redirectAfterLogin");
                 if (redirectURL != null) {
                     session.removeAttribute("redirectAfterLogin");
-                    response.sendRedirect(request.getContextPath() + "/" + redirectURL);
+                    response.sendRedirect(redirectURL);
                     return;
                 }
+                // ===========================================================
 
                 if ("admin".equals(role)) {
                     response.sendRedirect(request.getContextPath() + "/pages/admin/adminDashboard.jsp");
@@ -103,7 +105,6 @@ public class LoginServlet extends HttpServlet {
                 }
 
             } else {
-                // ❗ This code is now properly inside the try block
                 if (!loginDAO.doesUsernameExist(username)) {
                     request.setAttribute("status", "wrongUsername");
                 } else {

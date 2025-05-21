@@ -1,18 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.*, model.CartItem" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%@ page import="model.CartItem" %>
+<%@ page import="DAO.CartDAO" %>
+<%@ page import="java.sql.SQLException" %>
 
-<%
-    List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
-    if (cart == null) {
-        cart = new ArrayList<>();
-    }
 
-    double total = 0.0;
-    for (CartItem item : cart) {
-        total += item.getPrice() * item.getQuantity();
-    }
-%>
 
 <!DOCTYPE html>
 <html>
@@ -122,51 +114,85 @@
 </head>
 <body>
 <%@ include file="navbar.jsp" %>
+
+<%
+
+
+if (session.getAttribute("userId") == null) {
+    response.sendRedirect(request.getContextPath() + "/pages/customer/login.jsp");
+    return;
+    
+}
+
+//out.println("User ID from session: " + session.getAttribute("userId") + "<br>");
+    // Assuming userId is stored in session attribute "userId"
+    Integer userId = (Integer) session.getAttribute("userId");
+    List<CartItem> cartItems = null;
+    double totalPrice = 0;
+
+    if (userId != null) {
+        try {
+            CartDAO cartDAO = new CartDAO();
+            cartItems = cartDAO.getCartItemsByUserId(userId);
+           // out.println("Cart Items Fetched: " + (cartItems != null ? cartItems.size() : "null") + "<br>");
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+%>
+
 <div class="cart-container">
-    <h2 class="cart-title">Your Shopping Cart</h2>
+    <h2 class="cart-title">Your Cart</h2>
 
-    <c:if test="${empty cart}">
-        <p>Your cart is currently empty.</p>
-    </c:if>
-
-    <c:forEach var="item" items="${cart}">
+    <%
+    if (cartItems != null && !cartItems.isEmpty()) {
+        for (CartItem item : cartItems) {
+            double itemTotal = item.getPrice() * item.getQuantity();
+            totalPrice += itemTotal;
+    %>
         <div class="cart-item">
-            <img src="${pageContext.request.contextPath}/${item.imagePath}" alt="${item.productName}">
             <div class="cart-item-details">
-                <h4>${item.productName}</h4>
-                <p>Size: ${item.variantSize}</p>
-                <p>Price: ₹${item.price}</p>
-                <p>Quantity: ${item.quantity}</p>
+                <h4><%= item.getProductName() %></h4>
+                <p>Size: <%= item.getVariantSize() %></p>
+                <p>Price: ₹<%= item.getPrice() %></p>
+                <p>Quantity: <%= item.getQuantity() %></p>
             </div>
             <div class="cart-item-actions">
                 <form action="${pageContext.request.contextPath}/UpdateCartServlet" method="post">
-                    <input type="hidden" name="variantId" value="${item.variantId}">
-                    <input type="number" name="quantity" value="${item.quantity}" min="1" />
+                    <input type="hidden" name="variantId" value="<%= item.getVariantId() %>">
+                    <input type="number" name="quantity" value="<%= item.getQuantity() %>" min="1" />
                     <button type="submit">Update</button>
                 </form>
                 <form action="${pageContext.request.contextPath}/RemoveFromCartServlet" method="post">
-                    <input type="hidden" name="variantId" value="${item.variantId}">
+                    <input type="hidden" name="variantId" value="<%= item.getVariantId() %>">
                     <button type="submit">Remove</button>
                 </form>
             </div>
         </div>
-    </c:forEach>
-
-    <div class="cart-summary">
-        <p>Total: ₹<%= String.format("%.2f", total) %></p>
-    </div>
-
-    <div class="cart-buttons">
-        <form action="${pageContext.request.contextPath}/ClearCartServlet" method="post">
-            <button type="submit">Clear Cart</button>
-        </form>
-        <form action="${pageContext.request.contextPath}/pages/customer/checkout.jsp" method="post">
-            <button type="submit">Proceed to Checkout</button>
-        </form>
-    </div>
+    <%
+        } // end for loop
+    %>
+        <div class="cart-summary">
+            <p>Total: ₹<%= String.format("%.2f", totalPrice) %></p>
+        </div>
+        <div class="cart-buttons">
+            <form action="${pageContext.request.contextPath}/ClearCartServlet" method="post">
+                <button type="submit">Clear Cart</button>
+            </form>
+            <form action="${pageContext.request.contextPath}/pages/customer/checkout.jsp" method="post">
+                <button type="submit">Proceed to Checkout</button>
+            </form>
+        </div>
+    <%
+    } else {
+    %>
+        <p>Your cart is empty.</p>
+    <%
+    }
+    %>
 </div>
 
-<%@ include file="footer.jsp" %>
 
+<%@ include file="footer.jsp" %>
 </body>
 </html>

@@ -71,6 +71,6 @@ public class AddBrandServlet extends HttpServlet {
             request.setAttribute("status", "error");
         }
 
-        request.getRequestDispatcher("/pages/admin/prodduct.jsp").forward(request, response);
+        request.getRequestDispatcher("/pages/admin/AddBrand.jsp").forward(request, response);
     }
 }

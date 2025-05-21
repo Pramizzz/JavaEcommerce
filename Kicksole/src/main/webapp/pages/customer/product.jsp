@@ -176,11 +176,13 @@ if (selectedBrandId == null) {
             </div>
             <div class="product-actions">
                 <!-- Add to Cart Button -->
-                <form action="<%= request.getContextPath() %>/AddToCartServlet" method="post" style="display:inline;">
-                    <input type="hidden" name="variantId" value="<%= p.getVariantId() %>" />
-                    <input type="hidden" name="quantity" value="1" />
-                    <button type="submit">Add to Cart</button>
-                </form>
+               <form action="${pageContext.request.contextPath}/AddToCartServlet" method="post">
+    <input type="hidden" name="variantId" value="<%= p.getVariantId() %>" />
+    <input type="number" name="quantity" value="1" min="1" />
+    <button type="submit">Add to Cart</button>
+</form>
+
+
 
                 <!-- Buy Now Button -->
                 <form action="<%= request.getContextPath() %>/pages/customer/checkout.jsp" method="post" style="display:inline;">
