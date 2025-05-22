@@ -20,6 +20,8 @@ public class ShowProductDetailsServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             String variantIdParam = request.getParameter("variantId");
+
+            // Check if variantId is missing or invalid
             if (variantIdParam == null || variantIdParam.isEmpty()) {
                 response.sendRedirect("pages/customer/product.jsp");
                 return;
@@ -28,16 +30,16 @@ public class ShowProductDetailsServlet extends HttpServlet {
             int variantId = Integer.parseInt(variantIdParam);
 
             AddProductDAO dao = new AddProductDAO();
-            DisplayProductmodel product = dao.getProductByVariantId(variantId); // Ensure this method exists
+            DisplayProductmodel product = dao.getProductByVariantId(variantId); // fetch product
 
             if (product != null) {
-            	DisplayProductmodel model = new DisplayProductmodel();
-            	model = dao.getProductByVariantId(52);
-            	System.out.println(model.getProductName());
-            	System.out.println(model.getVariantSize());
-            	System.out.println(model.getVariantColor());
-            	System.out.println(model.getVariantStock());
-            	System.out.println(model.getPrice());
+                // Debug logs - helpful for dev, remove in production
+                System.out.println("Product Name: " + product.getProductName());
+                System.out.println("Size: " + product.getVariantSize());
+                System.out.println("Color: " + product.getVariantColor());
+                System.out.println("Stock: " + product.getVariantStock());
+                System.out.println("Price: " + product.getPrice());
+
                 request.setAttribute("product", product);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/customer/ProductDescription.jsp");
                 dispatcher.forward(request, response);
@@ -46,6 +48,10 @@ public class ShowProductDetailsServlet extends HttpServlet {
                 request.getRequestDispatcher("/pages/customer/ProductDescription.jsp").forward(request, response);
             }
 
+        } catch (NumberFormatException e) {
+            // If variantId is not a valid integer
+            e.printStackTrace();
+            response.sendRedirect("pages/customer/product.jsp");
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("pages/customer/product.jsp");

@@ -29,127 +29,366 @@ try {
 	href="${pageContext.request.contextPath}/css/pagescss/style.css">
 <title>Insert title here</title>
 <style>
-/* Grid layout: 6 per row */
-.products-grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 1.5rem;
-    padding: 1rem;
+
+
+.products-grid-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    background-color: #000000;
 }
 
-/* Product Card */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    justify-items: center;
+}
+
+/* Responsive Grid */
+@media (min-width: 1400px) {
+    .products-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1399px) {
+    .products-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 767px) {
+    .products-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .products-grid-container {
+        padding: 1rem 0.5rem;
+    }
+}
+
+/* ======================
+   PRODUCT CARDS
+   ====================== */
+
 .product-card {
-    background-color: #1e1e1e;
+    background-color: #333333;
     border-radius: 12px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    max-width: 320px;
+    transition: transform 0.2s ease;
 }
 
 .product-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.75);
+    transform: translateY(-5px);
 }
 
-/* Image */
+/* ======================
+   PRODUCT IMAGE
+   ====================== */
+
+.product-image {
+    position: relative;
+    background-color: #f5f5f5;
+    height: 240px;
+    overflow: hidden;
+}
+
 .product-image img {
     width: 100%;
-    height: 200px;
-    object-fit: fill;
-   
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
-/* Product Info */
+/* ======================
+   PRODUCT INFO
+   ====================== */
+
 .product-info {
-    padding: 1rem;
-    color: #eaeaea;
-    font-family: 'Segoe UI', sans-serif;
+    padding: 1.5rem;
+    color: #ffffff;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    text-align: center;
 }
 
 .product-info h3 {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-weight: 600;
     color: #ffffff;
-    margin-bottom: 0.5rem;
+    margin: 0 0 1rem 0;
+    line-height: 1.3;
 }
 
-.product-info p {
+/* Price Styling */
+.product-info p:first-of-type {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ff4444;
+    margin: 0 0 1rem 0;
+}
+
+/* Stock and Size Info */
+.product-info p:not(:first-of-type) {
     font-size: 0.95rem;
-    margin: 0.25rem 0;
-    color: #bbbbbb;
+    color: #cccccc;
+    margin: 0.5rem 0;
+    font-weight: 400;
 }
 
-/* Quantity input */
-.product-actions input[type="number"] {
-    width: 100%;
-    padding: 0.5rem;
-    border-radius: 6px;
-    background-color: #2d2d2d;
-    color: white;
-    border: 1px solid #444;
-    margin-bottom: 0.8rem;
-}
+/* ======================
+   PRODUCT ACTIONS
+   ====================== */
 
-/* Button Container */
 .product-actions {
+    padding: 0 1.5rem 1.5rem;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 0.5rem;
-    padding: 1rem;
+    flex-direction: column;
+    gap: 0.75rem;
 }
 
-/* Buttons */
 .product-actions form {
-    flex: 1 1 100%;
+    width: 100%;
 }
 
 .product-actions button {
     width: 100%;
-    padding: 0.6rem 1rem;
-    border: none;
+    padding: 0.75rem 1rem;
+    border: 2px solid #ff4444;
     border-radius: 6px;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     font-weight: 600;
-    color: white;
-    background-color: #3f51b5; /* Same color for all buttons */
+    color: #ffffff;
+    background-color: transparent;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    text-transform: none;
+    font-family: 'Segoe UI', Arial, sans-serif;
 }
 
-.product-actions button:hover {
-    background-color: #5c6bc0;
+/* Add to Cart Button - Red Border */
+.product-actions form:first-child button {
+    border-color: #ff4444;
+    color: #ffffff;
+}
+
+.product-actions form:first-child button:hover {
+    background-color: #ff4444;
+    color: #ffffff;
+}
+
+/* View Product Button - White Border */
+.product-actions form:nth-child(2) button {
+    border-color: #ffffff;
+    color: #ffffff;
+}
+
+.product-actions form:nth-child(2) button:hover {
+    background-color: #ffffff;
+    color: #333333;
+}
+
+/* Buy Now Button - Blue Border */
+.product-actions form:nth-child(3) button {
+    border-color: #4CAF50;
+    color: #ffffff;
+}
+
+.product-actions form:nth-child(3) button:hover {
+    background-color: #4CAF50;
+    color: #ffffff;
+}
+
+/* ======================
+   HEADER SECTION
+   ====================== */
+
+.products-header {
+    text-align: center;
+    padding: 2rem 0;
+    background-color: #000000;
+    color: #ffffff;
+}
+
+.products-header h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    color: #ffffff;
+}
+
+.products-header p {
+    font-size: 1.1rem;
+    color: #cccccc;
+    margin: 0;
+}
+
+/* ======================
+   FILTER SECTION
+   ====================== */
+
+.filter-section {
+    background-color: #000000;
+    padding: 1rem 0 2rem;
+}
+
+.filter-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    padding: 0 1rem;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.filter-group label {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.filter-group select {
+    padding: 0.5rem 1rem;
+    border: 1px solid #555555;
+    border-radius: 6px;
+    background-color: #333333;
+    color: #ffffff;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.filter-group select:focus {
+    outline: none;
+    border-color: #ff4444;
+}
+
+/* ======================
+   MAIN LAYOUT
+   ====================== */
+
+main {
+    background-color: #000000;
+    min-height: 100vh;
+}
+
+body {
+    background-color: #000000;
+    margin: 0;
+    padding: 0;
+}
+
+/* ======================
+   ERROR STATES
+   ====================== */
+
+.error-box {
+    background-color: #2d1b1b;
+    border: 2px solid #ff4444;
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2rem auto;
+    max-width: 600px;
+    text-align: center;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.error-box p {
+    color: #ff4444;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.error-box button {
+    padding: 0.75rem 2rem;
+    background-color: #ff4444;
+    border: none;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.error-box button:hover {
+    background-color: #ff6666;
+}
+
+/* ======================
+   RESPONSIVE ADJUSTMENTS
+   ====================== */
+
+@media (max-width: 768px) {
+    .products-header h2 {
+        font-size: 2rem;
+    }
+    
+    .filter-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .product-info {
+        padding: 1rem;
+    }
+    
+    .product-actions {
+        padding: 0 1rem 1rem;
+    }
 }
 
 
-    .error-box {
-        background-color: #ffe6e6;
-        border: 2px solid #cc0000;
-        padding: 20px;
-        border-radius: 8px;
-        width: 60%;
-        margin: 20px auto;
-        text-align: center;
-        font-family: Arial, sans-serif;
+.product-actions button:focus {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .product-card,
+    .product-actions button {
+        transition: none;
     }
-    .error-box p {
-        color: #cc0000;
-        font-size: 18px;
+    
+    .product-card:hover {
+        transform: none;
     }
-    .error-box button {
-        margin-top: 15px;
-        padding: 10px 20px;
-        background-color: #cc0000;
-        border: none;
-        color: white;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    .error-box button:hover {
-        background-color: #990000;
-    }
+}input[type="number"] {
+  width: 80px;
+  padding: 8px 10px;
+  font-size: 16px;
+  border: 1px solid #ff4444;
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  color: #ffffff;
+  background-color: #1a1a1a;
+}
+
+input[type="number"]:focus {
+  border-color: #ff4444;
+  box-shadow: 0 0 4px rgba(255, 68, 68, 0.5);
+}
+
+
 </style>
 </head>
 <body>
@@ -273,7 +512,7 @@ if (selectedBrandId == null) {
                   <!-- Add to Cart Button -->
                <form action="${pageContext.request.contextPath}/AddToCartServlet" method="post">
     <input type="hidden" name="variantId" value="<%= p.getVariantId() %>" />
-    <input type="number" name="quantity" value="1" min="1" />
+    <input type="hidden" name="quantity" value="1" min="1" />
     <button type="submit">Add to Cart</button>
 </form>
 <!-- View Product Button -->

@@ -16,83 +16,111 @@ if (sessionCheck != null && sessionCheck.getAttribute("username") != null) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jordan Shadow Sneaks Hub</title>
+    <meta name="description" content="Premium Jordan sneakers collection" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/pagescss/style.css">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <script src="<%= request.getContextPath() %>/javascript/script.js"></script>
+    <!-- Link Swiper's CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <title>Login</title>
     <style>
         body {
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
+            background-color: #000;
+            color: #fff;
             font-family: Arial, sans-serif;
         }
 
-        .wrapper {
-            background: white;
-            max-width: 430px;
-            width: 100%;
-            padding: 30px;
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: rgb(41, 43, 45);
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-title {
-            text-align: center;
-            font-size: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 420px;
+            padding: 30px;
+            margin: 40px 0;
             color: #333;
-            margin-bottom: 20px;
-            position: relative;
         }
 
-        .form-title::before {
+        .login-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .login-title::after {
             content: "";
             position: absolute;
+            bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            bottom: -8px;
+            width: 60px;
             height: 3px;
-            width: 50px;
-            background: #4070f4;
+            background-color: #4070f4;
             border-radius: 2px;
         }
 
-        .input-box {
-            margin-bottom: 15px;
+        .form-group {
+            margin-bottom: 20px;
         }
 
-        .input-box label {
+        .form-group label {
             display: block;
-            margin-bottom: 5px;
-            color: #555;
-        }
-
-        .input-box input[type="text"],
-        .input-box input[type="password"] {
-            width: 100%;
-            padding: 12px;
             font-size: 14px;
-            border: 1px solid #ddd;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 14px;
+            background-color: #333;
+            color: #fff;
+            border: none;
             border-radius: 4px;
+            transition: background-color 0.3s ease;
         }
 
-        .input-box input:focus {
-            border-color: #4070f4;
+        .form-control::placeholder {
+            color: #aaa;
+        }
+
+        .form-control:focus {
             outline: none;
-            box-shadow: 0 0 0 2px rgba(64, 112, 244, 0.2);
+            background-color: #444;
         }
 
-        .input-box.checkbox {
+        .form-check {
             display: flex;
             align-items: center;
+            margin-bottom: 20px;
         }
 
-        .input-box.checkbox input {
-            width: auto;
+        .form-check-input {
             margin-right: 10px;
         }
 
-        .input-box.button input {
+        .form-check-label {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .login-btn {
+            display: block;
             width: 100%;
             padding: 12px;
             background-color: #4070f4;
@@ -101,31 +129,34 @@ if (sessionCheck != null && sessionCheck.getAttribute("username") != null) {
             border-radius: 4px;
             font-size: 16px;
             cursor: pointer;
+            transition: background 0.3s ease;
         }
 
-        .input-box.button input:hover {
+        .login-btn:hover {
             background-color: #3060e4;
         }
 
-        p {
-            color: #e74c3c;
-            font-size: 13px;
-            margin-top: 5px;
-        }
-
-        .text {
+        .signup-text {
             text-align: center;
             margin-top: 20px;
+            font-size: 14px;
+            color: #555;
         }
 
-        .text a {
+        .signup-link {
             color: #4070f4;
             text-decoration: none;
             font-weight: 500;
         }
 
-        .text a:hover {
+        .signup-link:hover {
             text-decoration: underline;
+        }
+
+        .error-text {
+            color: #e74c3c;
+            font-size: 13px;
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -142,45 +173,47 @@ if (sessionCheck != null && sessionCheck.getAttribute("username") != null) {
 %>
 
 <body>
+    <%@ include file="navbar.jsp" %>
+    
+    <div class="login-container">
+        <div class="login-card">
+            <h2 class="login-title" style = "color: #fff;">Log In</h2>
+            
+            <form method="post" action="<%= request.getContextPath() %>/LoginServlet">
+                <div class="form-group">
+                    <label for="username" style = "color: #fff;">Username</label>
+                    <input type="text" class="form-control" name="username" id="username" placeholder="Your Username"
+                           value="<%= request.getParameter("username") != null ? request.getParameter("username") : "" %>">
+                    
+                    <c:if test="${status == 'wrongUsername'}"><p class="error-text">Wrong username.</p></c:if>
+                    <c:if test="${status == 'emptyFields'}"><p class="error-text">Enter all the fields.</p></c:if>
+                </div>
 
+                <div class="form-group">
+                    <label for="password" style = "color: #fff;">Password</label>
+                    <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+                    <c:if test="${status == 'wrongPassword'}"><p class="error-text">Wrong password.</p></c:if>
+                    <c:if test="${status == 'emptyFields'}"><p class="error-text">Enter all the fields.</p></c:if>
+                </div>
 
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="remember-me" id="remember-me">
+                    <label class="form-check-label" for="remember-me" style = "color: #fff;">Remember me</label>
+                </div>
 
-    <div class="wrapper">
-        <h2 class="form-title">Log In</h2>
-        <form method="post" action="<%= request.getContextPath() %>/LoginServlet">
-            <div class="input-box">
-                <label for="username">Username</label>
-                <input type="text" name="username" id="username" placeholder="Your Username"
-                        value="<%= request.getParameter("username") != null ? request.getParameter("username") : "" %>">
-              
-                <c:if test="${status == 'wrongUsername'}"><p>Wrong username.</p></c:if>
-                <c:if test="${status == 'emptyFields'}"><p>Enter all the fields.</p></c:if>
-                
+                <c:if test="${status == 'dbError'}">
+                    <p class="error-text" style="text-align:center;">Database connection error. Please try again later.</p>
+                </c:if>
+
+                <button type="submit" class="login-btn">Log in</button>
+            </form>
+            
+            <div class="signup-text">
+                Don't have an account? <a href="<%= request.getContextPath() %>/pages/customer/registration.jsp" class="signup-link">Sign up</a>
             </div>
-
-            <div class="input-box">
-                <label for="password">Password</label>
-                <input type="password" name="password" id="password" placeholder="Password">
-                            	<c:if test="${status == 'wrongPassword'}"><p>Wrong password.</p></c:if>
-                                <c:if test="${status == 'emptyFields'}"><p>Enter all the fields.</p></c:if>
-            </div>
-
-            <div class="input-box checkbox">
-                <input type="checkbox" name="remember-me" id="remember-me">
-                <label for="remember-me">Remember me</label>
-            </div>
-
-	<c:if test="${status == 'dbError'}">
-        <p style="color:red; text-align:center;">Database connection error. Please try again later.</p>
-    </c:if>
-
-            <div class="input-box button">
-                <input type="submit" value="Log in">
-            </div>
-        </form>
-        <div class="text">
-            <p>Don't have an account? <a href="<%= request.getContextPath() %>/pages/customer/registration.jsp">Sign up</a></p>
         </div>
     </div>
+    
+    <%@ include file="footer.jsp" %>
 </body>
 </html>

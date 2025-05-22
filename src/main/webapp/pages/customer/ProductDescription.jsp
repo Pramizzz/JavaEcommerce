@@ -50,16 +50,18 @@
         }
 
         .product-image {
-            width: 50%;
-            background-color: #000;
-        }
+    width: 50%;
+    background-color: #000;
+    height: 400px; /* Or use height: 100% for dynamic sizing */
+}
 
-        .product-image img {
-            width: 100%;
-            height: auto;
-            object-fit: cover;
-            display: block;
-        }
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
 
         .product-details {
             padding: 30px;
@@ -85,7 +87,7 @@
 
         .back-button {
             display: inline-block;
-            margin-top: 20px;
+            margin-top: -2px;
             padding: 10px 20px;
             background-color: #333;
             color: #fff;
